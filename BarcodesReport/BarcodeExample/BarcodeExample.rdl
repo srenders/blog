@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="recTmpBlob1_Blob">
+          <DataField>recTmpBlob1_Blob</DataField>
+        </Field>
+        <Field Name="txcEAN13">
+          <DataField>txcEAN13</DataField>
+        </Field>
+        <Field Name="recTmpBlob2_Blob">
+          <DataField>recTmpBlob2_Blob</DataField>
+        </Field>
+        <Field Name="txcCode128">
+          <DataField>txcCode128</DataField>
+        </Field>
+        <Field Name="recTmpBlob3_Blob">
+          <DataField>recTmpBlob3_Blob</DataField>
+        </Field>
+        <Field Name="txcCode39">
+          <DataField>txcCode39</DataField>
+        </Field>
+        <Field Name="recTmpBlob4_Blob">
+          <DataField>recTmpBlob4_Blob</DataField>
+        </Field>
+        <Field Name="txcEAN8">
+          <DataField>txcEAN8</DataField>
+        </Field>
+        <Field Name="EAN13Caption">
+          <DataField>EAN13Caption</DataField>
+        </Field>
+        <Field Name="CODE128Caption">
+          <DataField>CODE128Caption</DataField>
+        </Field>
+        <Field Name="CODE39Caption">
+          <DataField>CODE39Caption</DataField>
+        </Field>
+        <Field Name="EAN8Caption">
+          <DataField>EAN8Caption</DataField>
+        </Field>
+        <Field Name="Integer_Number">
+          <DataField>Integer_Number</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

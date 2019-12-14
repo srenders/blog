@@ -25,3 +25,7 @@ HOW DO I: CREATE A TIMELINE IN A REPORT DATASET IN AL?
   https://thinkaboutit.be/2019/07/how-do-i-create-a-timeline-in-a-report-dataset-in-al/
   https://github.com/srenders/blog/tree/master/OrderIntakeReport
 
+HOW DO I: ADD FILTERS IN A REPORT IN VSCODE WITH AL?
+
+  https://thinkaboutit.be/2019/12/how-do-i-add-filters-in-a-report-in-vscode-with-al/
+  https://github.com/srenders/blog/tree/master/ReportFiltering 

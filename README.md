@@ -1,0 +1,27 @@
+# blog examples
+Here you can find some examples from my blog: https://thinkaboutit.be
+
+
+HOW DO I: PRINT BARCODES IN RDLC?
+
+  https://thinkaboutit.be/2016/02/how-do-i-print-barcodes-in-rdlc/
+  https://github.com/srenders/blog/tree/master/BarcodesReport
+
+
+HOW DO I: USE RECORD NOTES IN AN AL PAGE OR REPORT?
+
+  https://thinkaboutit.be/2019/03/how-do-i-use-record-notes-in-an-al-page-or-report/
+  https://github.com/srenders/blog/tree/master/FindNotes
+
+
+HOW DO I: CREATE A GREEN-BAR REPORT IN RDLC?
+
+  https://thinkaboutit.be/2019/11/how-do-i-create-a-green-bar-report-in-rdlc/
+  https://github.com/srenders/blog/tree/master/GreenbarReport
+
+
+HOW DO I: CREATE A TIMELINE IN A REPORT DATASET IN AL?
+
+  https://thinkaboutit.be/2019/07/how-do-i-create-a-timeline-in-a-report-dataset-in-al/
+  https://github.com/srenders/blog/tree/master/OrderIntakeReport
+

@@ -1,0 +1,7 @@
+CODE/EXPORT/LOG/
+CODE/EXPORT/LOG/navcommandresult.txt
+.vscode/launch.json
+.alpackages/*
+*.app
+*.json
+*.xlf

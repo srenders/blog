@@ -31,5 +31,6 @@ HOW DO I: ADD FILTERS IN A REPORT IN VSCODE WITH AL?
   https://github.com/srenders/blog/tree/master/ReportFiltering 
   
 HOW DO I: POWER BI PAGES VERSUS QUERIES?
+
   https://thinkaboutit.be/2019/12/how-do-i-power-bi-pages-versus-queries/
   https://github.com/srenders/blog/tree/master/QueryVersusListpage

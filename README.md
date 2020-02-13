@@ -34,3 +34,8 @@ HOW DO I: POWER BI PAGES VERSUS QUERIES?
 
   https://thinkaboutit.be/2019/12/how-do-i-power-bi-pages-versus-queries/
   https://github.com/srenders/blog/tree/master/QueryVersusListpage
+  
+HOW DO I: CREATE A REPORT BASED UPON A QUERY?
+
+  https://thinkaboutit.be/2020/02/how-do-i-create-a-report-based-upon-a-query/
+  https://github.com/srenders/blog/tree/master/ReportBasedOnQuery

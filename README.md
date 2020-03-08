@@ -41,6 +41,7 @@ HOW DO I: CREATE A REPORT BASED UPON A QUERY?
   https://github.com/srenders/blog/tree/master/ReportBasedOnQuery
   
 USING THE POWER OF QUERIES TO BRING SOME SMARTNESS INTO BUSINESS CENTRAL
+
   https://thinkaboutit.be/2020/03/using-the-power-of-queries-to-bring-some-smartness-into-business-central/
   https://github.com/srenders/blog/tree/master/ItemsBoughtByOthers
   

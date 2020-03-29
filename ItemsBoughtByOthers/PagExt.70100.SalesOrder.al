@@ -3,7 +3,7 @@ pageextension 70100 SalesOrderExt extends "Sales Order"
     layout
     {
         // Add changes to page layout here
-        addafter(ApprovalFactBox)
+        addfirst(factboxes)
         {
             part(ItemCrossSaleFactbox; "Item Cross Sale Factbox")
             {

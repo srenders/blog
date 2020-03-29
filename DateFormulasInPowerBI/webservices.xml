@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExportedData>
+    <TenantWebServiceCollection>
+        <TenantWebService>
+            <ObjectType>Query</ObjectType>
+            <ServiceName>_qryDateFormulasInPowerBI</ServiceName>
+            <ObjectID>65123</ObjectID>
+            <Published>true</Published>
+        </TenantWebService>
+    </TenantWebServiceCollection>
+</ExportedData>

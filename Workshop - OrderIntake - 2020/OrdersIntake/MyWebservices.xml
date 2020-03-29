@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ExportedData>
+    <TenantWebServiceCollection>
+        <TenantWebService>
+            <ObjectType>Query</ObjectType>
+            <ServiceName>qryCustomers</ServiceName>
+            <ObjectID>50100</ObjectID>
+            <Published>true</Published>
+        </TenantWebService>
+        <TenantWebService>
+            <ObjectType>Query</ObjectType>
+            <ServiceName>qryItems</ServiceName>
+            <ObjectID>50102</ObjectID>
+            <Published>true</Published>
+        </TenantWebService>              
+         <TenantWebService>
+            <ObjectType>Query</ObjectType>
+            <ServiceName>qryOrderIntake</ServiceName>
+            <ObjectID>50101</ObjectID>
+            <Published>true</Published>
+        </TenantWebService>
+    </TenantWebServiceCollection>
+</ExportedData>

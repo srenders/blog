@@ -47,13 +47,11 @@ USING THE POWER OF QUERIES TO BRING SOME SMARTNESS INTO BUSINESS CENTRAL
   
 HOW DO I: CREATE A MINI REPORT INSPECTOR?
 
-  https://thinkaboutit.be/2020/06/how-do-i-create-a-mini-report-inspector/
-  
+  https://thinkaboutit.be/2020/06/how-do-i-create-a-mini-report-inspector/ 
   https://github.com/srenders/blog/tree/master/ExportReportDataset
 
 BUSINESS CENTRAL POWER BI MULTI ENVIRONMENT TEMPLATE:
 
-  https://thinkaboutit.be/2022/02/business-central-power-bi-multi-environment-template/
-  
+  https://thinkaboutit.be/2022/02/business-central-power-bi-multi-environment-template/  
   https://github.com/srenders/blog/tree/master/MultiEnvironment
 

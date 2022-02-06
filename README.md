@@ -54,4 +54,6 @@ HOW DO I: CREATE A MINI REPORT INSPECTOR?
 BUSINESS CENTRAL POWER BI MULTI ENVIRONMENT TEMPLATE:
 
   https://thinkaboutit.be/2022/02/business-central-power-bi-multi-environment-template/
+  
+  https://github.com/srenders/blog/tree/master/MultiEnvironment
 

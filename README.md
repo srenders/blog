@@ -25,33 +25,58 @@ HOW DO I: CREATE A TIMELINE IN A REPORT DATASET IN AL?
   https://thinkaboutit.be/2019/07/how-do-i-create-a-timeline-in-a-report-dataset-in-al/
   https://github.com/srenders/blog/tree/master/OrderIntakeReport
 
+
 HOW DO I: ADD FILTERS IN A REPORT IN VSCODE WITH AL?
 
   https://thinkaboutit.be/2019/12/how-do-i-add-filters-in-a-report-in-vscode-with-al/
   https://github.com/srenders/blog/tree/master/ReportFiltering 
+  
   
 HOW DO I: POWER BI PAGES VERSUS QUERIES?
 
   https://thinkaboutit.be/2019/12/how-do-i-power-bi-pages-versus-queries/
   https://github.com/srenders/blog/tree/master/QueryVersusListpage
   
+  
 HOW DO I: CREATE A REPORT BASED UPON A QUERY?
 
   https://thinkaboutit.be/2020/02/how-do-i-create-a-report-based-upon-a-query/
   https://github.com/srenders/blog/tree/master/ReportBasedOnQuery
   
+  
 USING THE POWER OF QUERIES TO BRING SOME SMARTNESS INTO BUSINESS CENTRAL
 
   https://thinkaboutit.be/2020/03/using-the-power-of-queries-to-bring-some-smartness-into-business-central/
   https://github.com/srenders/blog/tree/master/ItemsBoughtByOthers
-  
+    
+    
 HOW DO I: CREATE A MINI REPORT INSPECTOR?
 
   https://thinkaboutit.be/2020/06/how-do-i-create-a-mini-report-inspector/ 
   https://github.com/srenders/blog/tree/master/ExportReportDataset
 
+
 BUSINESS CENTRAL POWER BI MULTI ENVIRONMENT TEMPLATE:
 
   https://thinkaboutit.be/2022/02/business-central-power-bi-multi-environment-template/  
   https://github.com/srenders/blog/tree/master/MultiEnvironment
+
+
+HOW DO I: MONITOR THE BUSINESS CENTRAL JOB QUEUE USING POWER BI?
+
+  https://thinkaboutit.be/2022/11/how-do-i-monitor-the-business-central-job-queue-using-power-bi/
+  https://github.com/srenders/blog/tree/master/JobQueue
+
+
+HOW DO I: CREATE AN EXCEL LAYOUT REPORT?
+
+  https://thinkaboutit.be/2022/11/how-do-i-create-an-excel-layout-report/
+  https://github.com/srenders/blog/tree/master/ExcelLayouts/DirectionsEmea
+ 
+ 
+HOW DO I: CREATE A (FREE) BUSINESS CENTRAL TRIAL?
+
+  https://thinkaboutit.be/2023/02/how-do-i-create-a-free-business-central-trial/
+  https://github.com/srenders/blog/tree/master/BCTrial
+
 

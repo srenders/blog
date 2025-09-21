@@ -113,6 +113,21 @@ page 90114 "Power BI Setup"
                 end;
             }
 
+            action(SetupWizard)
+            {
+                Caption = 'Setup Wizard';
+                ApplicationArea = All;
+                Image = Setup;
+                ToolTip = 'Open the guided setup wizard to configure Power BI integration step by step.';
+
+                trigger OnAction()
+                var
+                    PowerBISetupWizard: Page "Power BI Setup Wizard";
+                begin
+                    PowerBISetupWizard.RunModal();
+                end;
+            }
+
             action(ManageAutoSync)
             {
                 Caption = 'Manage Auto Sync';
@@ -179,38 +194,39 @@ page 90114 "Power BI Setup"
     end;
 
     local procedure ShowSetupInstructions()
-    var
-        InstructionText: Text;
     begin
-        InstructionText := 'Power BI Integration Setup Instructions:\n\n' +
-                          '1. Register an application in Azure AD:\n' +
-                          '   - Go to Azure Portal > Azure Active Directory > App registrations\n' +
-                          '   - Click "New registration"\n' +
-                          '   - Enter a name for your application\n' +
-                          '   - Select "Accounts in this organizational directory only"\n' +
-                          '   - Click "Register"\n\n' +
-                          '2. Configure API permissions:\n' +
-                          '   - In your app registration, go to "API permissions"\n' +
-                          '   - Click "Add a permission"\n' +
-                          '   - Select "Power BI Service"\n' +
-                          '   - Add the following permissions:\n' +
-                          '     * Dataset.Read.All (for dataset operations)\n' +
-                          '     * Dataset.ReadWrite.All (for dataset refresh)\n' +
-                          '     * Dataflow.Read.All (for dataflow operations)\n' +
-                          '     * Dataflow.ReadWrite.All (for dataflow refresh)\n' +
-                          '     * Group.Read.All (for workspace access)\n' +
-                          '     * Workspace.Read.All (for workspace operations)\n' +
-                          '   - Grant admin consent\n\n' +
-                          '3. Create a client secret:\n' +
-                          '   - Go to "Certificates & secrets"\n' +
-                          '   - Click "New client secret"\n' +
-                          '   - Copy the secret value (you won''t see it again!)\n\n' +
-                          '4. Configure this page:\n' +
-                          '   - Client ID: Application (client) ID from overview page\n' +
-                          '   - Client Secret: The secret value you copied\n' +
-                          '   - Tenant ID: Directory (tenant) ID from overview page\n\n' +
-                          '5. Test the connection using the "Test Connection" action.';
-
-        Message(InstructionText);
+        Message('Power BI Integration Setup Instructions:\' +
+                '\' +
+                '1. Register an application in Azure AD:\' +
+                '   - Go to Azure Portal > Azure Active Directory > App registrations\' +
+                '   - Click "New registration"\' +
+                '   - Enter a name for your application\' +
+                '   - Select "Accounts in this organizational directory only"\' +
+                '   - Click "Register"\' +
+                '\' +
+                '2. Configure API permissions:\' +
+                '   - In your app registration, go to "API permissions"\' +
+                '   - Click "Add a permission"\' +
+                '   - Select "Power BI Service"\' +
+                '   - Add the following permissions:\' +
+                '     * Dataset.Read.All (for dataset operations)\' +
+                '     * Dataset.ReadWrite.All (for dataset refresh)\' +
+                '     * Dataflow.Read.All (for dataflow operations)\' +
+                '     * Dataflow.ReadWrite.All (for dataflow refresh)\' +
+                '     * Group.Read.All (for workspace access)\' +
+                '     * Workspace.Read.All (for workspace operations)\' +
+                '   - Grant admin consent\' +
+                '\' +
+                '3. Create a client secret:\' +
+                '   - Go to "Certificates & secrets"\' +
+                '   - Click "New client secret"\' +
+                '   - Copy the secret value (you won''t see it again!)\' +
+                '\' +
+                '4. Configure this page:\' +
+                '   - Client ID: Application (client) ID from overview page\' +
+                '   - Client Secret: The secret value you copied\' +
+                '   - Tenant ID: Directory (tenant) ID from overview page\' +
+                '\' +
+                '5. Test the connection using the "Test Connection" action.');
     end;
 }

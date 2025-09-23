@@ -9,16 +9,6 @@ page 90120 "Power BI Role Center"
         area(RoleCenter)
         {
             // Left Column
-            group(Control1900724808)
-            {
-                ShowCaption = false;
-                part(PowerBIActivities; "Power BI Activities")
-                {
-                    ApplicationArea = All;
-                }
-            }
-
-            // Right Column
             group(Control1900724608)
             {
                 ShowCaption = false;
@@ -31,6 +21,16 @@ page 90120 "Power BI Role Center"
                     ApplicationArea = All;
                 }
                 part(DataflowsOverview; "Power BI Dataflows Overview")
+                {
+                    ApplicationArea = All;
+                }
+            }
+
+            // Right Column
+            group(Control1900724808)
+            {
+                ShowCaption = false;
+                part(PowerBIActivities; "Power BI Activities")
                 {
                     ApplicationArea = All;
                 }

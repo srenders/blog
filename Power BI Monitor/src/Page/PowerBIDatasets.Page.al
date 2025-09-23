@@ -16,6 +16,7 @@ page 90113 "Power BI Datasets"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the unique identifier of the dataset.';
+                    Visible = false;
                 }
 
                 field("Dataset Name"; Rec."Dataset Name")
@@ -224,7 +225,7 @@ page 90113 "Power BI Datasets"
 
             action(GetRefreshHistory)
             {
-                Caption = 'Get Dataset Refresh History';
+                Caption = 'Get Refresh History';
                 ApplicationArea = All;
                 Image = UpdateDescription;
                 ToolTip = 'Get the latest refresh history for the selected dataset.';
@@ -238,6 +239,96 @@ page 90113 "Power BI Datasets"
                         Message('Refresh history updated for dataset: %1', Rec."Dataset Name");
                     end else
                         Message('Failed to get refresh history for dataset: %1', Rec."Dataset Name");
+                end;
+            }
+
+            action(GetRefreshHistoryMultiple)
+            {
+                Caption = 'Get Refresh History for Selected';
+                ApplicationArea = All;
+                Image = UpdateDescription;
+                ToolTip = 'Get refresh history for all selected datasets.';
+
+                trigger OnAction()
+                var
+                    PowerBIDataset: Record "Power BI Dataset";
+                    PowerBIAPI: Codeunit "Power BI API Management";
+                    SelectedCount: Integer;
+                    SuccessCount: Integer;
+                    FailedCount: Integer;
+                begin
+                    CurrPage.SetSelectionFilter(PowerBIDataset);
+                    if PowerBIDataset.FindSet() then begin
+                        repeat
+                            SelectedCount += 1;
+                        until PowerBIDataset.Next() = 0;
+
+                        if Confirm('Do you want to get refresh history for %1 selected dataset(s)?', false, SelectedCount) then begin
+                            PowerBIDataset.Reset();
+                            CurrPage.SetSelectionFilter(PowerBIDataset);
+                            if PowerBIDataset.FindSet() then
+                                repeat
+                                    if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                        SuccessCount += 1
+                                    else
+                                        FailedCount += 1;
+                                until PowerBIDataset.Next() = 0;
+
+                            // Show summary results
+                            if FailedCount = 0 then
+                                Message('Successfully updated refresh history for %1 dataset(s).', SuccessCount)
+                            else
+                                Message('Refresh history updated for %1 dataset(s). %2 failed to update.', SuccessCount, FailedCount);
+
+                            CurrPage.Update(false);
+                        end;
+                    end else
+                        Message('No datasets selected. Please select one or more datasets.');
+                end;
+            }
+
+            action(GetRefreshHistoryAll)
+            {
+                Caption = 'Get Refresh History for All';
+                ApplicationArea = All;
+                Image = UpdateDescription;
+                ToolTip = 'Get refresh history for all datasets in the current view.';
+
+                trigger OnAction()
+                var
+                    PowerBIDataset: Record "Power BI Dataset";
+                    PowerBIAPI: Codeunit "Power BI API Management";
+                    TotalCount: Integer;
+                    SuccessCount: Integer;
+                    FailedCount: Integer;
+                begin
+                    PowerBIDataset.CopyFilters(Rec);
+                    if PowerBIDataset.FindSet() then begin
+                        repeat
+                            TotalCount += 1;
+                        until PowerBIDataset.Next() = 0;
+
+                        if Confirm('Do you want to get refresh history for all %1 dataset(s) in the current view?', false, TotalCount) then begin
+                            PowerBIDataset.Reset();
+                            PowerBIDataset.CopyFilters(Rec);
+                            if PowerBIDataset.FindSet() then
+                                repeat
+                                    if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                        SuccessCount += 1
+                                    else
+                                        FailedCount += 1;
+                                until PowerBIDataset.Next() = 0;
+
+                            // Show summary results
+                            if FailedCount = 0 then
+                                Message('Successfully updated refresh history for all %1 dataset(s).', SuccessCount)
+                            else
+                                Message('Refresh history updated for %1 dataset(s). %2 failed to update.', SuccessCount, FailedCount);
+
+                            CurrPage.Update(false);
+                        end;
+                    end else
+                        Message('No datasets found in the current view.');
                 end;
             }
         }

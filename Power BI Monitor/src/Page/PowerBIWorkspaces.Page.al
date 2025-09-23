@@ -16,6 +16,7 @@ page 90112 "Power BI Workspaces"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the unique identifier of the Power BI workspace.';
+                    Visible = false;
                 }
 
                 field("Workspace Name"; Rec."Workspace Name")

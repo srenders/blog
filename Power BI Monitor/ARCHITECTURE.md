@@ -1,5 +1,5 @@
 # Technical Architecture Documentation
-## Power BI Integration for Business Central
+## Power BI Monitor for Business Central
 
 ### Version: 1.0.0
 ### Date: September 21, 2025
@@ -8,7 +8,7 @@
 
 ## 📐 Architecture Overview
 
-The Power BI Integration extension follows a **modular, service-oriented architecture** that implements SOLID principles and separation of concerns. The design emphasizes maintainability, testability, and scalability.
+The Power BI Monitor extension follows a **modular, service-oriented architecture** that implements SOLID principles and separation of concerns. The design emphasizes maintainability, testability, and scalability.
 
 ### 🎯 Design Principles
 

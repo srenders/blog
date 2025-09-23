@@ -13,7 +13,7 @@ page 90118 "Power BI Management"
             {
                 Caption = 'Setup';
 
-                field(SetupDescription; 'Configure Power BI integration settings and connection')
+                field(SetupDescription; 'Configure Power BI Monitor settings and connection')
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -52,7 +52,7 @@ page 90118 "Power BI Management"
                     Caption = 'Setup Wizard';
                     ApplicationArea = All;
                     Image = Setup;
-                    ToolTip = 'Open the guided setup wizard to configure Power BI integration step by step.';
+                    ToolTip = 'Open the guided setup wizard to configure Power BI Monitor step by step.';
                     Promoted = true;
                     PromotedCategory = Process;
                     PromotedIsBig = true;

@@ -1,5 +1,5 @@
 # Installation Guide
-## Power BI Integration for Business Central
+## Power BI Monitor for Business Central
 
 ### Version: 1.0.0
 ### Date: September 21, 2025
@@ -129,7 +129,7 @@ Ensure the following URLs are accessible from your Business Central environment:
    
    **Fill out the form:**
    ```
-   Name: "Business Central Power BI Integration"
+   Name: "Business Central Power BI Monitor"
    Supported account types: "Accounts in this organizational directory only"
    Redirect URI: Leave blank for now
    ```
@@ -183,7 +183,7 @@ Ensure the following URLs are accessible from your Business Central environment:
 2. **Add New Client Secret**
    ```
    Click "New client secret"
-   Description: "BC Power BI Integration Secret"
+   Description: "BC Power BI Monitor Secret"
    Expires: Choose appropriate duration (24 months recommended)
    Click "Add"
    ```
@@ -230,7 +230,7 @@ Ensure the following URLs are accessible from your Business Central environment:
 2. **Open Extension Marketplace**
    ```
    Apps → Extension Marketplace
-   Search for "Power BI Integration"
+   Search for "Power BI Monitor"
    ```
 
 3. **Install Extension**
@@ -266,7 +266,7 @@ Ensure the following URLs are accessible from your Business Central environment:
 1. **Check Extension Status**
    ```
    Apps → Extension Management
-   Find "Power BI Integration"
+   Find "Power BI Monitor"
    Status should show "Installed"
    ```
 
@@ -279,7 +279,7 @@ Ensure the following URLs are accessible from your Business Central environment:
 
 3. **Check Assisted Setup**
    ```
-   Assisted Setup → Look for "Power BI Integration Setup"
+   Assisted Setup → Look for "Power BI Monitor Setup"
    ```
 
 ---
@@ -293,7 +293,7 @@ Choose one of the following configuration methods:
 1. **Access Assisted Setup**
    ```
    Business Central → Assisted Setup
-   Find "Power BI Integration Setup"
+   Find "Power BI Monitor Setup"
    Click "Start Setup"
    ```
 

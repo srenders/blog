@@ -1,6 +1,6 @@
 codeunit 90140 "Power BI Assisted Setup"
 {
-    // Handles assisted setup registration for Power BI integration
+    // Handles assisted setup registration for Power BI Monitor
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Guided Experience", 'OnRegisterAssistedSetup', '', false, false)]
     local procedure OnRegisterAssistedSetup()
@@ -10,9 +10,9 @@ codeunit 90140 "Power BI Assisted Setup"
         VideoCategory: Enum "Video Category";
     begin
         GuidedExperience.InsertAssistedSetup(
-            'Power BI Integration Setup',
-            'Power BI Integration Setup',
-            'Set up Power BI integration to synchronize and manage Power BI content from Business Central.',
+            'Power BI Monitor Setup',
+            'Power BI Monitor Setup',
+            'Set up Power BI Monitor to synchronize and manage Power BI content from Business Central.',
             5,
             ObjectType::Page,
             Page::"Power BI Setup Wizard",
@@ -43,7 +43,7 @@ codeunit 90140 "Power BI Assisted Setup"
     end;
 
     /// <summary>
-    /// Checks if Power BI integration is configured
+    /// Checks if Power BI Monitor is configured
     /// </summary>
     /// <returns>True if basic configuration is complete</returns>
     procedure IsSetupComplete(): Boolean

@@ -1,6 +1,6 @@
-# Power BI Integration for Business Central
+# Power BI Monitor for Business Central
 
-A comprehensive Business Central extension that enables seamless integration with Microsoft Power BI, allowing you to synchronize, manage, and monitor Power BI workspaces, datasets, and dataflows directly from Business Central.
+A comprehensive Business Central extension that enables seamless monitoring and management of Microsoft Power BI resources, allowing you to synchronize, track, and monitor Power BI workspaces, datasets, and dataflows directly from Business Central.
 
 ## 📋 Table of Contents
 
@@ -19,11 +19,11 @@ A comprehensive Business Central extension that enables seamless integration wit
 
 ## 🎯 Overview
 
-The Power BI Integration extension bridges Business Central and Power BI, providing:
+The Power BI Monitor extension bridges Business Central and Power BI, providing:
 
-- **Centralized Management**: Manage all Power BI resources from within Business Central
+- **Centralized Monitoring**: Monitor all Power BI resources from within Business Central
 - **Automated Synchronization**: Keep BC data in sync with Power BI content
-- **Monitoring & Analytics**: Track refresh performance and status
+- **Performance Analytics**: Track refresh performance and status
 - **User-Friendly Setup**: Guided wizard for easy configuration
 - **Enterprise Security**: OAuth 2.0 authentication with Azure AD
 
@@ -86,7 +86,7 @@ Choose one of two setup methods:
 
 #### Option A: Guided Setup Wizard (Recommended)
 1. Go to **Assisted Setup** in Business Central
-2. Find "Power BI Integration Setup"
+2. Find "Power BI Monitor Setup"
 3. Follow the step-by-step wizard
 
 #### Option B: Manual Setup
@@ -103,7 +103,7 @@ Choose one of two setup methods:
 1. Go to Azure Portal (portal.azure.com)
 2. Navigate to Azure Active Directory > App registrations
 3. Click "New registration"
-4. Name: "Business Central Power BI Integration"
+4. Name: "Business Central Power BI Monitor"
 5. Account type: "Accounts in this organizational directory only"
 6. Click "Register"
 ```
@@ -428,4 +428,4 @@ After setup, explore these features:
 
 ---
 
-**Power BI Integration v1.0.0** | Built with ❤️ for Business Central
+**Power BI Monitor v1.0.0** | Built with ❤️ for Business Central

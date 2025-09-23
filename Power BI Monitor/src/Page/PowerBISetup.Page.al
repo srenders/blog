@@ -105,7 +105,7 @@ page 90114 "Power BI Setup"
                 Caption = 'Setup Instructions';
                 ApplicationArea = All;
                 Image = Info;
-                ToolTip = 'View setup instructions for configuring Power BI integration.';
+                ToolTip = 'View setup instructions for configuring Power BI Monitor.';
 
                 trigger OnAction()
                 begin
@@ -118,7 +118,7 @@ page 90114 "Power BI Setup"
                 Caption = 'Setup Wizard';
                 ApplicationArea = All;
                 Image = Setup;
-                ToolTip = 'Open the guided setup wizard to configure Power BI integration step by step.';
+                ToolTip = 'Open the guided setup wizard to configure Power BI Monitor step by step.';
 
                 trigger OnAction()
                 var
@@ -195,7 +195,7 @@ page 90114 "Power BI Setup"
 
     local procedure ShowSetupInstructions()
     begin
-        Message('Power BI Integration Setup Instructions:\' +
+        Message('Power BI Monitor Setup Instructions:\' +
                 '\' +
                 '1. Register an application in Azure AD:\' +
                 '   - Go to Azure Portal > Azure Active Directory > App registrations\' +

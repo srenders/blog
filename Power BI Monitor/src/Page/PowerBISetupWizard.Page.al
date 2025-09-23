@@ -1,6 +1,6 @@
 page 90117 "Power BI Setup Wizard"
 {
-    Caption = 'Power BI Integration Setup Wizard';
+    Caption = 'Power BI Monitor Setup Wizard';
     PageType = NavigatePage;
     SourceTable = "Power BI Setup";
     UsageCategory = Administration;
@@ -31,8 +31,8 @@ page 90117 "Power BI Setup Wizard"
 
                 group("Welcome")
                 {
-                    Caption = 'Welcome to Power BI Integration Setup';
-                    InstructionalText = 'This wizard will guide you through setting up Power BI integration for Business Central. You will need to register an application in Azure AD and configure API permissions.';
+                    Caption = 'Welcome to Power BI Monitor Setup';
+                    InstructionalText = 'This wizard will guide you through setting up Power BI Monitor for Business Central. You will need to register an application in Azure AD and configure API permissions.';
 
                     field(WelcomeText; WelcomeText)
                     {
@@ -222,7 +222,7 @@ page 90117 "Power BI Setup Wizard"
                 group("Completion")
                 {
                     Caption = 'Setup Complete!';
-                    InstructionalText = 'Your Power BI integration is now configured and ready to use.';
+                    InstructionalText = 'Your Power BI Monitor is now configured and ready to use.';
 
                     field(CompletionText; CompletionText)
                     {
@@ -353,7 +353,7 @@ page 90117 "Power BI Setup Wizard"
 
     local procedure InitializeTexts()
     begin
-        WelcomeText := 'This setup wizard will help you configure Power BI integration for Business Central.\' +
+        WelcomeText := 'This setup wizard will help you configure Power BI Monitor for Business Central.\' +
                       '\' +
                       'You will need:\' +
                       '• Access to Azure Active Directory admin portal\' +
@@ -372,7 +372,7 @@ page 90117 "Power BI Setup Wizard"
                            '1. Click "Open Azure Portal" below (or go to portal.azure.com)\' +
                            '2. Navigate to Azure Active Directory > App registrations\' +
                            '3. Click "New registration"\' +
-                           '4. Enter a name like "Business Central Power BI Integration"\' +
+                           '4. Enter a name like "Business Central Power BI Monitor"\' +
                            '5. Select "Accounts in this organizational directory only"\' +
                            '6. Leave Redirect URI empty\' +
                            '7. Click "Register"\' +
@@ -428,7 +428,7 @@ page 90117 "Power BI Setup Wizard"
                           '• Client secret is valid and not expired\' +
                           '• Network connectivity to Azure AD and Power BI';
 
-        CompletionText := 'Congratulations! Your Power BI integration is now configured.\' +
+        CompletionText := 'Congratulations! Your Power BI Monitor is now configured.\' +
                         '\' +
                         'You can now:\' +
                         '• Synchronize Power BI workspaces\' +
@@ -628,7 +628,7 @@ page 90117 "Power BI Setup Wizard"
     local procedure FinishSetup()
     begin
         SaveConfiguration();
-        Message('Power BI integration setup completed successfully!\' +
+        Message('Power BI Monitor setup completed successfully!\' +
                 '\' +
                 'You can now use the Power BI workspaces, datasets, and dataflows pages\' +
                 'to manage your Power BI content from Business Central.');

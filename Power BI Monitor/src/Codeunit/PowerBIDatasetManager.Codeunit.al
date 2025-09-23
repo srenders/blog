@@ -1,6 +1,6 @@
 codeunit 90133 "Power BI Dataset Manager"
 {
-    // Dataset-specific operations for Power BI integration
+    // Dataset-specific operations for Power BI Monitor
     Permissions = tabledata "Power BI Dataset" = RIMD;
 
     var

@@ -4,7 +4,6 @@ A comprehensive Business Central extension that enables seamless monitoring and 
 
 ## 📋 Table of Contents
 
-- [Recent Updates](#recent-updates)
 - [Overview](#overview)
 - [Features](#features)
 - [Prerequisites](#prerequisites)
@@ -18,17 +17,21 @@ A comprehensive Business Central extension that enables seamless monitoring and 
 - [Contributing](#contributing)
 - [License](#license)
 
-## � Recent Updates
 
 
+#### 🏗️ **Architecture Modernization (v1.2.0)**
+- **Service-Oriented Design**: Complete migration from monolithic to specialized service architecture
+- **Enhanced Error Handling**: Improved error detection with actionable user feedback
+- **Zero Breaking Changes**: Seamless upgrade maintaining all existing functionality
+- **Better Maintainability**: Clean separation of concerns and modular design
 
-#### 📊 **New Features**
+#### 📊 **Enhanced Features**
 - **Status Filtering**: Quick filters to show only failed refreshes for troubleshooting
 - **Refresh Summary**: Detailed summary views for individual refresh operations
 - **Cross-Navigation**: Easy navigation between related pages and data
 - **Error Analysis**: Comprehensive error detail viewing for failed operations
 
-#### 🛠️ **Bug Fixes**
+#### 🛠️ **Reliability Improvements**
 - Fixed GUID comparison issues in dataflow synchronization
 - Resolved refresh history data population problems
 - Improved error handling for missing or invalid workspace IDs
@@ -240,13 +243,23 @@ Configure dataset refreshes to run automatically:
 - **PBI Dataset Refresh History** (90120): Detailed dataset refresh tracking
 - **PBI Dataflow Refresh History** (90121): Detailed dataflow refresh tracking
 
-#### Management Codeunits
-- **Power BI API Management** (90110): Main orchestrator
+#### Service-Oriented Architecture (v1.2.0+)
+
+**Core Orchestration Layer:**
+- **Power BI API Orchestrator** (90120): Clean orchestration layer with improved error handling
+- **Power BI Auto Sync** (90121): Automation functionality
+
+**Infrastructure Services:**
 - **Power BI Authentication** (90130): OAuth token management
-- **Power BI Http Client** (90131): HTTP communication
-- **Power BI Json Processor** (90132): JSON parsing utilities
-- **Power BI Dataset Manager** (90133): Dataset operations
-- **Power BI Auto Sync** (90120): Automation functionality
+- **Power BI Http Client** (90131): Centralized HTTP communication and authentication
+- **Power BI Json Processor** (90132): Reusable JSON parsing utilities
+
+**Specialized Resource Managers:**
+- **Power BI Workspace Manager** (90134): Workspace operations and management
+- **Power BI Dataset Manager** (90133): Dataset operations and refresh management
+- **Power BI Dataflow Manager** (90135): Dataflow operations and transaction tracking
+- **Power BI Dashboard Manager** (90136): Dashboard operations and management
+- **Power BI Report Manager** (90137): Report operations and management
 
 #### User Interface
 - **Resource Management Pages**: Enhanced interfaces for workspaces, datasets, dataflows, and reports
@@ -256,14 +269,41 @@ Configure dataset refreshes to run automatically:
 - **Overview Pages**: Dashboard-style summaries with performance metrics
 - **Standardized Actions**: Consistent action grouping and naming across all pages
 
+### Architecture Benefits (v1.2.0+)
+
+**Service-Oriented Design:**
+- **Single Responsibility**: Each manager handles one specific Power BI resource type
+- **Separation of Concerns**: HTTP, JSON, and business logic cleanly separated
+- **Better Error Handling**: Enhanced error detection with actionable user feedback
+- **Improved Maintainability**: Smaller, focused components that are easier to test and extend
+
+**Enhanced User Experience:**
+- **Consistent Error Messages**: Standardized error handling across all operations
+- **Better Success Feedback**: Clear confirmation messages with operation details
+- **Actionable Guidance**: Error messages include troubleshooting suggestions
+
 ### Data Flow
 ```
-Business Central → Azure AD → Power BI REST API
-     ↓               ↓              ↓
-Authentication → HTTP Client → JSON Processing
-     ↓               ↓              ↓
-Token Caching → Response → Database Storage
+Business Central → PowerBI API Orchestrator → Specialized Managers
+     ↓                      ↓                       ↓
+PowerBI HTTP Client → Authentication → JSON Processor
+     ↓                      ↓                       ↓
+Azure AD Token → Power BI REST API → Response Processing
+     ↓                      ↓                       ↓
+Token Caching → HTTP Response → Database Storage
 ```
+
+### Migration from Monolithic Architecture
+**Previous Architecture (v1.1.0 and earlier):**
+- Single 3000+ line codeunit mixing all concerns
+- Generic error handling
+- Difficult to maintain and extend
+
+**New Architecture (v1.2.0+):**
+- Clean service-oriented design with specialized managers
+- Enhanced error handling and user feedback
+- Modular, extensible, and maintainable
+- Zero breaking changes during migration
 
 ### Security Architecture
 - **OAuth 2.0**: Client credentials flow
@@ -375,15 +415,27 @@ Token Caching → Response → Database Storage
 
 ### Main Procedures
 
-#### Power BI API Management
+#### Power BI API Orchestrator (New Architecture)
 ```al
+// Core Synchronization Operations
+procedure SynchronizeAllData(): Boolean
 procedure SynchronizeWorkspaces(): Boolean
 procedure SynchronizeDatasets(WorkspaceId: Guid): Boolean
 procedure SynchronizeDataflows(WorkspaceId: Guid): Boolean
+procedure SynchronizeDashboards(WorkspaceId: Guid): Boolean
+procedure SynchronizeReports(WorkspaceId: Guid): Boolean
+
+// Refresh Operations
 procedure TriggerDatasetRefresh(WorkspaceId: Guid; DatasetId: Guid): Boolean
 procedure TriggerDataflowRefresh(WorkspaceId: Guid; DataflowId: Guid): Boolean
+
+// History Operations
 procedure GetDatasetRefreshHistory(WorkspaceId: Guid; DatasetId: Guid): Boolean
 procedure GetDataflowRefreshHistory(WorkspaceId: Guid; DataflowId: Guid): Boolean
+
+// Backward Compatibility Methods
+procedure SynchronizeReports(): Boolean
+procedure SynchronizeReportsForWorkspace(WorkspaceId: Guid): Boolean
 ```
 
 #### Authentication
@@ -482,7 +534,17 @@ After setup, explore these features:
 
 ## 📝 Change Log
 
-### Version 1.1.0 (Latest)
+### Version 1.2.0 (Latest) - Architecture Modernization
+- 🏗️ **Service-Oriented Architecture**: Complete migration from monolithic to service-oriented design
+- 🔧 **Enhanced Error Handling**: Improved error detection with actionable user feedback
+- 📦 **Specialized Managers**: Dedicated managers for each Power BI resource type
+- 🎯 **Clean Orchestration**: New PowerBI API Orchestrator provides unified, clean interface
+- 🔄 **Zero Breaking Changes**: Seamless migration maintaining all existing functionality
+- 📈 **Better Maintainability**: Smaller, focused components easier to test and extend
+- ✨ **Improved UX**: Enhanced success/error messaging with troubleshooting guidance
+- 🏛️ **Modular Design**: Easy to add new Power BI resource types and operations
+
+### Version 1.1.0 - Enhanced Operations
 - ✅ **Enhanced Refresh History**: Complete refresh history tracking for datasets and dataflows
 - ✅ **Improved User Interface**: Standardized actions with consistent grouping and naming
 - ✅ **Bulk Operations**: Comprehensive bulk refresh capabilities (selected/all)
@@ -499,4 +561,4 @@ After setup, explore these features:
 
 ---
 
-**Power BI Monitor v1.1.0** | Built with ❤️ for Business Central
+**Power BI Monitor v1.2.0** | Built with ❤️ for Business Central | Service-Oriented Architecture ✨

@@ -1,9 +1,12 @@
-# Power BI Monitor for Business Central
+# Power BI Monitor- - [License](#license)cense](#license)
+
+## 🎯 Overviewwr Business Central
 
 A comprehensive Business Central extension that enables seamless monitoring and management of Microsoft Power BI resources, allowing you to synchronize, track, and monitor Power BI workspaces, datasets, and dataflows directly from Business Central.
 
 ## 📋 Table of Contents
 
+- [Recent Updates](#recent-updates)
 - [Overview](#overview)
 - [Features](#features)
 - [Prerequisites](#prerequisites)
@@ -17,7 +20,23 @@ A comprehensive Business Central extension that enables seamless monitoring and 
 - [Contributing](#contributing)
 - [License](#license)
 
-## 🎯 Overview
+## � Recent Updates
+
+
+
+#### 📊 **New Features**
+- **Status Filtering**: Quick filters to show only failed refreshes for troubleshooting
+- **Refresh Summary**: Detailed summary views for individual refresh operations
+- **Cross-Navigation**: Easy navigation between related pages and data
+- **Error Analysis**: Comprehensive error detail viewing for failed operations
+
+#### 🛠️ **Bug Fixes**
+- Fixed GUID comparison issues in dataflow synchronization
+- Resolved refresh history data population problems
+- Improved error handling for missing or invalid workspace IDs
+- Enhanced validation for bulk operations
+
+## �🎯 Overview
 
 The Power BI Monitor extension bridges Business Central and Power BI, providing:
 
@@ -36,22 +55,33 @@ The Power BI Monitor extension bridges Business Central and Power BI, providing:
 
 ### 📊 Dataset Management
 - List and manage datasets across workspaces
-- Trigger dataset refreshes
-- Monitor refresh status and performance
-- Track refresh history and statistics
-- Bulk refresh operations
+- **Individual & Bulk Refresh Operations**: Refresh single, selected, or all datasets
+- Monitor refresh status and performance in real-time
+- **Comprehensive Refresh History**: Detailed tracking of all refresh operations
+- Performance metrics with duration statistics and success rates
+- **Smart Filtering**: Only refreshable datasets are processed in bulk operations
 
 ### 🔄 Dataflow Management
-- View and manage Power BI dataflows
-- Trigger dataflow refreshes
-- Monitor refresh transactions
-- Performance tracking and reporting
+- View and manage Power BI dataflows across workspaces
+- **Enhanced Refresh Operations**: Individual, bulk selected, and bulk all refresh capabilities
+- **Transaction Monitoring**: Detailed tracking of dataflow refresh transactions
+- **Refresh History Management**: Store and analyze complete refresh history
+- Performance tracking with duration and error analysis
+- Workspace-specific synchronization options
 
 ### 📈 Reporting & Analytics
-- Dataset refresh performance metrics
-- Success/failure rate tracking
-- Duration statistics and trends
-- Comprehensive overview dashboards
+- **Detailed Refresh History Pages**: Comprehensive views with advanced filtering
+- **Performance Metrics Dashboard**: Success/failure rates, duration trends, and statistics
+- **Error Analysis**: Detailed error information for troubleshooting failed operations
+- **Status Filtering**: Quick access to failed operations for immediate attention
+- Cross-resource analytics and reporting capabilities
+
+### 🎨 Enhanced User Experience
+- **Organized Action Groups**: Logically grouped actions (Refresh, History, Filters)
+- **Consistent Interface**: Standardized naming and behavior across all pages
+- **Comprehensive Feedback**: Detailed operation results with success/failure counts
+- **Smart Confirmations**: Context-aware confirmation dialogs with relevant information
+- **Cross-Page Navigation**: Easy navigation between related resources and their history
 
 ### 🛠️ Administration
 - **Setup Wizard**: Step-by-step guided configuration
@@ -162,15 +192,25 @@ Enter the following in Power BI Setup:
 - **Access Workspace**: Click "Open in Power BI" to navigate to portal
 
 #### Dataset Operations
-- **Bulk Refresh**: Select multiple datasets and use "Refresh Selected Datasets"
-- **Monitor Status**: Check "Last Refresh Status" column
-- **View Performance**: Review "Average Refresh Duration" metrics
-- **Check History**: Use "Get Refresh History" action for detailed logs
+- **Individual Refresh**: "Refresh This Dataset" for single dataset operations
+- **Bulk Refresh**: "Refresh Selected Datasets" or "Refresh All Datasets in View"
+- **Monitor Status**: Real-time status tracking with "Last Refresh Status" column
+- **View Performance**: Review "Average Refresh Duration" and success rate metrics
+- **Manage History**: "Update Refresh History" actions (individual, selected, or all)
+- **Analyze History**: Navigate to detailed refresh history with filtering options
 
 #### Dataflow Operations
-- **View Dataflows**: Navigate to "Power BI Dataflows"
-- **Refresh Dataflows**: Use individual or bulk refresh actions
-- **Monitor Transactions**: Check refresh status and duration
+- **View Dataflows**: Navigate to "Power BI Dataflows" with workspace information
+- **Synchronization**: "Sync All Dataflows" or "Sync Dataflows for This Workspace"
+- **Refresh Operations**: Individual, selected, or bulk refresh capabilities
+- **History Management**: Comprehensive refresh history tracking and analysis
+- **Monitor Transactions**: Detailed transaction tracking with error analysis
+
+#### Refresh History Analysis
+- **Advanced Filtering**: Filter by resource, workspace, status, or show failed operations only
+- **Error Details**: View comprehensive error information for failed operations
+- **Refresh Summary**: Detailed summary views for individual refresh operations
+- **Cross-Navigation**: Easy navigation between history and source resources
 
 ### Automation
 
@@ -199,6 +239,8 @@ Configure dataset refreshes to run automatically:
 - **Power BI Dataset** (90112): Dataset metadata and metrics
 - **Power BI Dataflow** (90113): Dataflow information
 - **Power BI Report** (90114): Report metadata
+- **PBI Dataset Refresh History** (90120): Detailed dataset refresh tracking
+- **PBI Dataflow Refresh History** (90121): Detailed dataflow refresh tracking
 
 #### Management Codeunits
 - **Power BI API Management** (90110): Main orchestrator
@@ -209,10 +251,12 @@ Configure dataset refreshes to run automatically:
 - **Power BI Auto Sync** (90120): Automation functionality
 
 #### User Interface
-- **Pages**: Management interfaces for each resource type
-- **Role Center**: Dedicated Power BI management workspace
-- **Setup Wizard**: Guided configuration experience
-- **Overview Pages**: Dashboard-style summaries
+- **Resource Management Pages**: Enhanced interfaces for workspaces, datasets, dataflows, and reports
+- **Refresh History Pages**: Dedicated pages for detailed refresh history analysis
+- **Role Center**: Dedicated Power BI management workspace with quick access to all features
+- **Setup Wizard**: Guided configuration experience for easy setup
+- **Overview Pages**: Dashboard-style summaries with performance metrics
+- **Standardized Actions**: Consistent action grouping and naming across all pages
 
 ### Data Flow
 ```
@@ -322,6 +366,13 @@ Token Caching → Response → Database Storage
 | 429 | Rate Limited | Reduce API call frequency |
 | 500 | Server Error | Retry later or contact support |
 
+### Recent Fixes
+
+#### GUID Format Error
+**Issue**: "Invalid format of GUID string" when syncing dataflows for workspace
+**Solution**: Fixed GUID comparison logic in workspace synchronization actions
+**Details**: Changed from string comparison (`<> ''`) to proper GUID comparison (`<> EmptyGuid`)
+
 ## 📚 API Reference
 
 ### Main Procedures
@@ -330,8 +381,11 @@ Token Caching → Response → Database Storage
 ```al
 procedure SynchronizeWorkspaces(): Boolean
 procedure SynchronizeDatasets(WorkspaceId: Guid): Boolean
+procedure SynchronizeDataflows(WorkspaceId: Guid): Boolean
 procedure TriggerDatasetRefresh(WorkspaceId: Guid; DatasetId: Guid): Boolean
+procedure TriggerDataflowRefresh(WorkspaceId: Guid; DataflowId: Guid): Boolean
 procedure GetDatasetRefreshHistory(WorkspaceId: Guid; DatasetId: Guid): Boolean
+procedure GetDataflowRefreshHistory(WorkspaceId: Guid; DataflowId: Guid): Boolean
 ```
 
 #### Authentication
@@ -428,4 +482,23 @@ After setup, explore these features:
 
 ---
 
-**Power BI Monitor v1.0.0** | Built with ❤️ for Business Central
+## 📝 Change Log
+
+### Version 1.1.0 (Latest)
+- ✅ **Enhanced Refresh History**: Complete refresh history tracking for datasets and dataflows
+- ✅ **Improved User Interface**: Standardized actions with consistent grouping and naming
+- ✅ **Bulk Operations**: Comprehensive bulk refresh capabilities (selected/all)
+- ✅ **Advanced Filtering**: Enhanced filtering options in history pages
+- ✅ **Error Analysis**: Detailed error information and troubleshooting capabilities
+- ✅ **Bug Fixes**: Resolved GUID format errors and data population issues
+- ✅ **Performance**: Optimized API calls and response processing
+
+### Version 1.0.0 (Initial Release)
+- ✅ **Core Functionality**: Basic Power BI resource synchronization
+- ✅ **Authentication**: OAuth 2.0 client credentials flow
+- ✅ **Setup Wizard**: Guided configuration experience
+- ✅ **Basic Operations**: Individual refresh operations and monitoring
+
+---
+
+**Power BI Monitor v1.1.0** | Built with ❤️ for Business Central

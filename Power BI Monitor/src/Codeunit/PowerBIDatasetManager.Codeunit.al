@@ -133,6 +133,8 @@ codeunit 90133 "Power BI Dataset Manager"
     local procedure ProcessRefreshHistory(JsonArray: JsonArray; WorkspaceId: Guid; DatasetId: Guid)
     var
         PowerBIDataset: Record "Power BI Dataset";
+        PowerBIWorkspace: Record "Power BI Workspace";
+
         JToken: JsonToken;
         JObject: JsonObject;
         RefreshType: Text;
@@ -142,9 +144,17 @@ codeunit 90133 "Power BI Dataset Manager"
         DurationMinutes: Decimal;
         TotalDuration: Decimal;
         RefreshCount: Integer;
+        DatasetName: Text;
+        WorkspaceName: Text;
     begin
         if not PowerBIDataset.Get(DatasetId, WorkspaceId) then
             exit;
+
+        DatasetName := PowerBIDataset."Dataset Name";
+
+        // Get workspace name for history records
+        if PowerBIWorkspace.Get(WorkspaceId) then
+            WorkspaceName := PowerBIWorkspace."Workspace Name";
 
         TotalDuration := 0;
         RefreshCount := 0;
@@ -155,6 +165,9 @@ codeunit 90133 "Power BI Dataset Manager"
             // Extract refresh information using helper
             if PowerBIJsonProcessor.ExtractRefreshInfo(JObject, RefreshType, Status, StartTime, EndTime) then begin
                 RefreshCount += 1;
+
+                // Store detailed refresh history
+                StoreDatasetRefreshHistoryRecord(JObject, DatasetId, DatasetName, WorkspaceId, WorkspaceName);
 
                 // Update latest refresh info on first iteration (most recent)
                 if RefreshCount = 1 then
@@ -173,6 +186,89 @@ codeunit 90133 "Power BI Dataset Manager"
             UpdateRefreshStatistics(PowerBIDataset, TotalDuration, RefreshCount);
 
         PowerBIDataset.Modify();
+    end;
+
+    local procedure StoreDatasetRefreshHistoryRecord(JObject: JsonObject; DatasetId: Guid; DatasetName: Text; WorkspaceId: Guid; WorkspaceName: Text)
+    var
+        RefreshHistory: Record "PBI Dataset Refresh History";
+        RefreshId: Text;
+        StartTime: DateTime;
+        EndTime: DateTime;
+        Status: Text;
+        RefreshType: Text;
+        ErrorMessage: Text;
+        ServiceExceptionJson: Text;
+    begin
+        // Extract refresh ID
+        RefreshId := PowerBIJsonProcessor.GetTextValue(JObject, 'requestId', '');
+        if RefreshId = '' then
+            RefreshId := PowerBIJsonProcessor.GetTextValue(JObject, 'id', '');
+
+        if RefreshId = '' then
+            exit;
+
+        // Check if record already exists
+        RefreshHistory.SetRange("Refresh ID", RefreshId);
+        if RefreshHistory.FindFirst() then
+            exit; // Already processed
+
+        // Create new record
+        RefreshHistory.Init();
+        RefreshHistory."Dataset ID" := Format(DatasetId);
+        RefreshHistory."Dataset Name" := CopyStr(DatasetName, 1, MaxStrLen(RefreshHistory."Dataset Name"));
+        RefreshHistory."Workspace ID" := Format(WorkspaceId);
+        RefreshHistory."Workspace Name" := CopyStr(WorkspaceName, 1, MaxStrLen(RefreshHistory."Workspace Name"));
+        RefreshHistory."Refresh ID" := CopyStr(RefreshId, 1, MaxStrLen(RefreshHistory."Refresh ID"));
+
+        // Extract and store refresh details
+        StartTime := PowerBIJsonProcessor.GetDateTimeValue(JObject, 'startTime');
+        RefreshHistory."Start Time" := StartTime;
+
+        EndTime := PowerBIJsonProcessor.GetDateTimeValue(JObject, 'endTime');
+        RefreshHistory."End Time" := EndTime;
+
+        RefreshHistory.CalculateDuration();
+
+        Status := PowerBIJsonProcessor.GetTextValue(JObject, 'status', '');
+        RefreshHistory."Status" := ConvertToRefreshStatus(Status);
+
+        RefreshType := PowerBIJsonProcessor.GetTextValue(JObject, 'refreshType', '');
+        RefreshHistory."Refresh Type" := CopyStr(RefreshType, 1, MaxStrLen(RefreshHistory."Refresh Type"));
+
+        // Handle error information
+        if RefreshHistory."Status" = RefreshHistory."Status"::Failed then begin
+            ErrorMessage := PowerBIJsonProcessor.GetTextValue(JObject, 'serviceExceptionJson', '');
+            if ErrorMessage = '' then
+                ErrorMessage := PowerBIJsonProcessor.GetTextValue(JObject, 'error', '');
+
+            RefreshHistory."Error Message" := CopyStr(ErrorMessage, 1, MaxStrLen(RefreshHistory."Error Message"));
+
+            ServiceExceptionJson := PowerBIJsonProcessor.GetTextValue(JObject, 'serviceExceptionJson', '');
+            if ServiceExceptionJson <> '' then
+                RefreshHistory.SetServiceExceptionText(ServiceExceptionJson);
+        end;
+
+        RefreshHistory.Insert(true);
+    end;
+
+    local procedure ConvertToRefreshStatus(StatusText: Text): Enum "Power BI Refresh Status"
+    var
+        RefreshStatus: Enum "Power BI Refresh Status";
+    begin
+        case LowerCase(StatusText) of
+            'completed':
+                exit(RefreshStatus::Completed);
+            'failed':
+                exit(RefreshStatus::Failed);
+            'inprogress', 'in progress':
+                exit(RefreshStatus::"In Progress");
+            'disabled':
+                exit(RefreshStatus::Disabled);
+            'notstarted', 'not started':
+                exit(RefreshStatus::NotStarted);
+            else
+                exit(RefreshStatus::Unknown);
+        end;
     end;
 
     local procedure UpdateLatestRefreshInfo(var PowerBIDataset: Record "Power BI Dataset"; Status: Text; StartTime: DateTime; EndTime: DateTime)

@@ -87,249 +87,260 @@ page 90113 "Power BI Datasets"
     {
         area(processing)
         {
-            action(RefreshDataset)
+            group(Refresh)
             {
-                Caption = 'Refresh This Dataset';
-                ApplicationArea = All;
-                Image = Refresh;
-                ToolTip = 'Trigger a refresh of the selected dataset in Power BI.';
-                Enabled = RefreshEnabled;
+                Caption = 'Refresh Operations';
+                ToolTip = 'Actions for triggering dataset refreshes in Power BI';
 
-                trigger OnAction()
-                var
-                    PowerBIAPI: Codeunit "Power BI API Management";
-                begin
-                    if Confirm('Do you want to trigger a refresh for dataset %1?', false, Rec."Dataset Name") then
-                        if PowerBIAPI.TriggerDatasetRefresh(Rec."Workspace ID", Rec."Dataset ID") then begin
-                            Message('Refresh successfully triggered for dataset: %1', Rec."Dataset Name");
-                            // Optionally refresh the page to get updated status
-                            CurrPage.Update(false);
+                action(RefreshDataset)
+                {
+                    Caption = 'Refresh This Dataset';
+                    ApplicationArea = All;
+                    Image = Refresh;
+                    ToolTip = 'Trigger a refresh of the selected dataset in Power BI.';
+                    Enabled = RefreshEnabled;
+
+                    trigger OnAction()
+                    var
+                        PowerBIAPI: Codeunit "Power BI API Management";
+                    begin
+                        if Confirm('Do you want to trigger a refresh for dataset "%1"?', false, Rec."Dataset Name") then
+                            if PowerBIAPI.TriggerDatasetRefresh(Rec."Workspace ID", Rec."Dataset ID") then begin
+                                Message('Refresh successfully triggered for dataset: %1', Rec."Dataset Name");
+                                CurrPage.Update(false);
+                            end else
+                                Message('Failed to trigger refresh for dataset: %1', Rec."Dataset Name");
+                    end;
+                }
+
+                action(RefreshMultipleDatasets)
+                {
+                    Caption = 'Refresh Selected Datasets';
+                    ApplicationArea = All;
+                    Image = RefreshLines;
+                    ToolTip = 'Trigger refresh for all selected refreshable datasets in Power BI.';
+
+                    trigger OnAction()
+                    var
+                        PowerBIDataset: Record "Power BI Dataset";
+                        PowerBIAPI: Codeunit "Power BI API Management";
+                        SelectedCount: Integer;
+                        SuccessCount: Integer;
+                        FailedCount: Integer;
+                        RefreshableCount: Integer;
+                        ConfirmText: Text;
+                    begin
+                        CurrPage.SetSelectionFilter(PowerBIDataset);
+                        if PowerBIDataset.FindSet() then begin
+                            repeat
+                                SelectedCount += 1;
+                                if PowerBIDataset."Is Refreshable" then
+                                    RefreshableCount += 1;
+                            until PowerBIDataset.Next() = 0;
+
+                            if RefreshableCount = 0 then begin
+                                Message('None of the selected datasets are refreshable.');
+                                exit;
+                            end;
+
+                            if SelectedCount = RefreshableCount then
+                                ConfirmText := 'Do you want to trigger refresh for %1 selected dataset(s)?'
+                            else
+                                ConfirmText := 'Do you want to trigger refresh for %2 refreshable dataset(s) out of %1 selected?';
+
+                            if Confirm(ConfirmText, false, SelectedCount, RefreshableCount) then begin
+                                PowerBIDataset.Reset();
+                                CurrPage.SetSelectionFilter(PowerBIDataset);
+                                if PowerBIDataset.FindSet() then
+                                    repeat
+                                        if PowerBIDataset."Is Refreshable" then
+                                            if PowerBIAPI.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                                SuccessCount += 1
+                                            else
+                                                FailedCount += 1;
+                                    until PowerBIDataset.Next() = 0;
+
+                                // Show summary results
+                                if FailedCount = 0 then
+                                    Message('Successfully triggered refresh for %1 dataset(s).', SuccessCount)
+                                else
+                                    Message('Refresh triggered for %1 dataset(s). %2 failed to trigger.', SuccessCount, FailedCount);
+
+                                CurrPage.Update(false);
+                            end;
                         end else
-                            Message('Failed to trigger refresh for dataset: %1', Rec."Dataset Name");
-                end;
+                            Message('No datasets selected. Please select one or more datasets to refresh.');
+                    end;
+                }
+
+                action(RefreshAllDatasets)
+                {
+                    Caption = 'Refresh All Datasets in View';
+                    ApplicationArea = All;
+                    Image = RefreshText;
+                    ToolTip = 'Trigger refresh for all refreshable datasets in the current view.';
+
+                    trigger OnAction()
+                    var
+                        PowerBIDataset: Record "Power BI Dataset";
+                        PowerBIAPI: Codeunit "Power BI API Management";
+                        TotalCount: Integer;
+                        RefreshableCount: Integer;
+                        SuccessCount: Integer;
+                        FailedCount: Integer;
+                    begin
+                        PowerBIDataset.CopyFilters(Rec);
+                        if PowerBIDataset.FindSet() then begin
+                            repeat
+                                TotalCount += 1;
+                                if PowerBIDataset."Is Refreshable" then
+                                    RefreshableCount += 1;
+                            until PowerBIDataset.Next() = 0;
+
+                            if RefreshableCount = 0 then begin
+                                Message('No refreshable datasets found in the current view.');
+                                exit;
+                            end;
+
+                            if Confirm('Do you want to trigger refresh for all %1 refreshable dataset(s)? (Total datasets in view: %2)', false, RefreshableCount, TotalCount) then begin
+                                PowerBIDataset.Reset();
+                                PowerBIDataset.CopyFilters(Rec);
+                                if PowerBIDataset.FindSet() then
+                                    repeat
+                                        if PowerBIDataset."Is Refreshable" then
+                                            if PowerBIAPI.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                                SuccessCount += 1
+                                            else
+                                                FailedCount += 1;
+                                    until PowerBIDataset.Next() = 0;
+
+                                // Show summary results
+                                if FailedCount = 0 then
+                                    Message('Successfully triggered refresh for all %1 refreshable dataset(s).', SuccessCount)
+                                else
+                                    Message('Refresh triggered for %1 dataset(s). %2 failed to trigger.', SuccessCount, FailedCount);
+
+                                CurrPage.Update(false);
+                            end;
+                        end else
+                            Message('No datasets found in the current view.');
+                    end;
+                }
             }
 
-            action(RefreshMultipleDatasets)
+            group(RefreshHistory)
             {
-                Caption = 'Refresh Selected Datasets';
-                ApplicationArea = All;
-                Image = RefreshLines;
-                ToolTip = 'Trigger refresh for all selected datasets in Power BI.';
+                Caption = 'Refresh History';
+                ToolTip = 'Actions for managing dataset refresh history tracking';
 
-                trigger OnAction()
-                var
-                    PowerBIDataset: Record "Power BI Dataset";
-                    PowerBIAPI: Codeunit "Power BI API Management";
-                    SelectedCount: Integer;
-                    SuccessCount: Integer;
-                    FailedCount: Integer;
-                    RefreshableCount: Integer;
-                    ConfirmText: Text;
-                begin
-                    CurrPage.SetSelectionFilter(PowerBIDataset);
-                    if PowerBIDataset.FindSet() then begin
-                        repeat
-                            SelectedCount += 1;
-                            if PowerBIDataset."Is Refreshable" then
-                                RefreshableCount += 1;
-                        until PowerBIDataset.Next() = 0;
+                action(GetRefreshHistory)
+                {
+                    Caption = 'Update Refresh History';
+                    ApplicationArea = All;
+                    Image = UpdateDescription;
+                    ToolTip = 'Get the latest refresh history for the selected dataset from Power BI.';
 
-                        if RefreshableCount = 0 then begin
-                            Message('None of the selected datasets are refreshable.');
-                            exit;
-                        end;
+                    trigger OnAction()
+                    var
+                        PowerBIAPI: Codeunit "Power BI API Management";
+                    begin
+                        if PowerBIAPI.GetDatasetRefreshHistory(Rec."Workspace ID", Rec."Dataset ID") then begin
+                            CurrPage.Update(false);
+                            Message('Refresh history updated for dataset: %1', Rec."Dataset Name");
+                        end else
+                            Message('Failed to get refresh history for dataset: %1', Rec."Dataset Name");
+                    end;
+                }
 
-                        if SelectedCount = RefreshableCount then
-                            ConfirmText := 'Do you want to trigger refresh for %1 selected datasets?'
-                        else
-                            ConfirmText := 'Do you want to trigger refresh for %2 refreshable datasets out of %1 selected?';
+                action(GetRefreshHistoryMultiple)
+                {
+                    Caption = 'Update Refresh History for Selected';
+                    ApplicationArea = All;
+                    Image = UpdateDescription;
+                    ToolTip = 'Get refresh history for all selected datasets from Power BI.';
 
-                        if Confirm(ConfirmText, false, SelectedCount, RefreshableCount) then begin
-                            PowerBIDataset.Reset();
-                            CurrPage.SetSelectionFilter(PowerBIDataset);
-                            if PowerBIDataset.FindSet() then
-                                repeat
-                                    if PowerBIDataset."Is Refreshable" then
-                                        if PowerBIAPI.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                    trigger OnAction()
+                    var
+                        PowerBIDataset: Record "Power BI Dataset";
+                        PowerBIAPI: Codeunit "Power BI API Management";
+                        SelectedCount: Integer;
+                        SuccessCount: Integer;
+                        FailedCount: Integer;
+                    begin
+                        CurrPage.SetSelectionFilter(PowerBIDataset);
+                        if PowerBIDataset.FindSet() then begin
+                            repeat
+                                SelectedCount += 1;
+                            until PowerBIDataset.Next() = 0;
+
+                            if Confirm('Do you want to update refresh history for %1 selected dataset(s)?', false, SelectedCount) then begin
+                                PowerBIDataset.Reset();
+                                CurrPage.SetSelectionFilter(PowerBIDataset);
+                                if PowerBIDataset.FindSet() then
+                                    repeat
+                                        if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;
-                                until PowerBIDataset.Next() = 0;
+                                    until PowerBIDataset.Next() = 0;
 
-                            // Show summary results
-                            if FailedCount = 0 then
-                                Message('Successfully triggered refresh for %1 dataset(s).', SuccessCount)
-                            else
-                                Message('Refresh triggered for %1 dataset(s). %2 failed to trigger.', SuccessCount, FailedCount);
+                                // Show summary results
+                                if FailedCount = 0 then
+                                    Message('Successfully updated refresh history for %1 dataset(s).', SuccessCount)
+                                else
+                                    Message('Refresh history updated for %1 dataset(s). %2 failed to update.', SuccessCount, FailedCount);
 
-                            CurrPage.Update(false);
-                        end;
-                    end else
-                        Message('No datasets selected. Please select one or more datasets to refresh.');
-                end;
-            }
+                                CurrPage.Update(false);
+                            end;
+                        end else
+                            Message('No datasets selected. Please select one or more datasets.');
+                    end;
+                }
 
-            action(RefreshAllDatasets)
-            {
-                Caption = 'Refresh All Datasets (Refreshable Only)';
-                ApplicationArea = All;
-                Image = RefreshText;
-                ToolTip = 'Trigger refresh for all refreshable datasets in the current view.';
+                action(GetRefreshHistoryAll)
+                {
+                    Caption = 'Update Refresh History for All';
+                    ApplicationArea = All;
+                    Image = UpdateDescription;
+                    ToolTip = 'Get refresh history for all datasets in the current view from Power BI.';
 
-                trigger OnAction()
-                var
-                    PowerBIDataset: Record "Power BI Dataset";
-                    PowerBIAPI: Codeunit "Power BI API Management";
-                    TotalCount: Integer;
-                    RefreshableCount: Integer;
-                    SuccessCount: Integer;
-                    FailedCount: Integer;
-                begin
-                    PowerBIDataset.CopyFilters(Rec);
-                    if PowerBIDataset.FindSet() then begin
-                        repeat
-                            TotalCount += 1;
-                            if PowerBIDataset."Is Refreshable" then
-                                RefreshableCount += 1;
-                        until PowerBIDataset.Next() = 0;
+                    trigger OnAction()
+                    var
+                        PowerBIDataset: Record "Power BI Dataset";
+                        PowerBIAPI: Codeunit "Power BI API Management";
+                        TotalCount: Integer;
+                        SuccessCount: Integer;
+                        FailedCount: Integer;
+                    begin
+                        PowerBIDataset.CopyFilters(Rec);
+                        if PowerBIDataset.FindSet() then begin
+                            repeat
+                                TotalCount += 1;
+                            until PowerBIDataset.Next() = 0;
 
-                        if RefreshableCount = 0 then begin
-                            Message('No refreshable datasets found in the current view.');
-                            exit;
-                        end;
-
-                        if Confirm('Do you want to trigger refresh for all %1 refreshable datasets? (Total datasets in view: %2)', false, RefreshableCount, TotalCount) then begin
-                            PowerBIDataset.Reset();
-                            PowerBIDataset.CopyFilters(Rec);
-                            if PowerBIDataset.FindSet() then
-                                repeat
-                                    if PowerBIDataset."Is Refreshable" then
-                                        if PowerBIAPI.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                            if Confirm('Do you want to update refresh history for all %1 dataset(s) in the current view?', false, TotalCount) then begin
+                                PowerBIDataset.Reset();
+                                PowerBIDataset.CopyFilters(Rec);
+                                if PowerBIDataset.FindSet() then
+                                    repeat
+                                        if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;
-                                until PowerBIDataset.Next() = 0;
+                                    until PowerBIDataset.Next() = 0;
 
-                            // Show summary results
-                            if FailedCount = 0 then
-                                Message('Successfully triggered refresh for all %1 refreshable dataset(s).', SuccessCount)
-                            else
-                                Message('Refresh triggered for %1 dataset(s). %2 failed to trigger.', SuccessCount, FailedCount);
+                                // Show summary results
+                                if FailedCount = 0 then
+                                    Message('Successfully updated refresh history for all %1 dataset(s).', SuccessCount)
+                                else
+                                    Message('Refresh history updated for %1 dataset(s). %2 failed to update.', SuccessCount, FailedCount);
 
-                            CurrPage.Update(false);
-                        end;
-                    end else
-                        Message('No datasets found in the current view.');
-                end;
-            }
-
-            action(GetRefreshHistory)
-            {
-                Caption = 'Get Refresh History';
-                ApplicationArea = All;
-                Image = UpdateDescription;
-                ToolTip = 'Get the latest refresh history for the selected dataset.';
-
-                trigger OnAction()
-                var
-                    PowerBIAPI: Codeunit "Power BI API Management";
-                begin
-                    if PowerBIAPI.GetDatasetRefreshHistory(Rec."Workspace ID", Rec."Dataset ID") then begin
-                        CurrPage.Update(false);
-                        Message('Refresh history updated for dataset: %1', Rec."Dataset Name");
-                    end else
-                        Message('Failed to get refresh history for dataset: %1', Rec."Dataset Name");
-                end;
-            }
-
-            action(GetRefreshHistoryMultiple)
-            {
-                Caption = 'Get Refresh History for Selected';
-                ApplicationArea = All;
-                Image = UpdateDescription;
-                ToolTip = 'Get refresh history for all selected datasets.';
-
-                trigger OnAction()
-                var
-                    PowerBIDataset: Record "Power BI Dataset";
-                    PowerBIAPI: Codeunit "Power BI API Management";
-                    SelectedCount: Integer;
-                    SuccessCount: Integer;
-                    FailedCount: Integer;
-                begin
-                    CurrPage.SetSelectionFilter(PowerBIDataset);
-                    if PowerBIDataset.FindSet() then begin
-                        repeat
-                            SelectedCount += 1;
-                        until PowerBIDataset.Next() = 0;
-
-                        if Confirm('Do you want to get refresh history for %1 selected dataset(s)?', false, SelectedCount) then begin
-                            PowerBIDataset.Reset();
-                            CurrPage.SetSelectionFilter(PowerBIDataset);
-                            if PowerBIDataset.FindSet() then
-                                repeat
-                                    if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
-                                        SuccessCount += 1
-                                    else
-                                        FailedCount += 1;
-                                until PowerBIDataset.Next() = 0;
-
-                            // Show summary results
-                            if FailedCount = 0 then
-                                Message('Successfully updated refresh history for %1 dataset(s).', SuccessCount)
-                            else
-                                Message('Refresh history updated for %1 dataset(s). %2 failed to update.', SuccessCount, FailedCount);
-
-                            CurrPage.Update(false);
-                        end;
-                    end else
-                        Message('No datasets selected. Please select one or more datasets.');
-                end;
-            }
-
-            action(GetRefreshHistoryAll)
-            {
-                Caption = 'Get Refresh History for All';
-                ApplicationArea = All;
-                Image = UpdateDescription;
-                ToolTip = 'Get refresh history for all datasets in the current view.';
-
-                trigger OnAction()
-                var
-                    PowerBIDataset: Record "Power BI Dataset";
-                    PowerBIAPI: Codeunit "Power BI API Management";
-                    TotalCount: Integer;
-                    SuccessCount: Integer;
-                    FailedCount: Integer;
-                begin
-                    PowerBIDataset.CopyFilters(Rec);
-                    if PowerBIDataset.FindSet() then begin
-                        repeat
-                            TotalCount += 1;
-                        until PowerBIDataset.Next() = 0;
-
-                        if Confirm('Do you want to get refresh history for all %1 dataset(s) in the current view?', false, TotalCount) then begin
-                            PowerBIDataset.Reset();
-                            PowerBIDataset.CopyFilters(Rec);
-                            if PowerBIDataset.FindSet() then
-                                repeat
-                                    if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
-                                        SuccessCount += 1
-                                    else
-                                        FailedCount += 1;
-                                until PowerBIDataset.Next() = 0;
-
-                            // Show summary results
-                            if FailedCount = 0 then
-                                Message('Successfully updated refresh history for all %1 dataset(s).', SuccessCount)
-                            else
-                                Message('Refresh history updated for %1 dataset(s). %2 failed to update.', SuccessCount, FailedCount);
-
-                            CurrPage.Update(false);
-                        end;
-                    end else
-                        Message('No datasets found in the current view.');
-                end;
+                                CurrPage.Update(false);
+                            end;
+                        end else
+                            Message('No datasets found in the current view.');
+                    end;
+                }
             }
         }
 
@@ -348,6 +359,24 @@ page 90113 "Power BI Datasets"
                         HyperLink(Rec."Web URL")
                     else
                         Message('Web URL not available for this dataset.');
+                end;
+            }
+
+            action(ViewRefreshHistory)
+            {
+                Caption = 'View Refresh History';
+                ApplicationArea = All;
+                Image = History;
+                ToolTip = 'View detailed refresh history for this dataset.';
+
+                trigger OnAction()
+                var
+                    RefreshHistory: Record "PBI Dataset Refresh History";
+                    RefreshHistoryPage: Page "PBI Dataset Refresh History";
+                begin
+                    RefreshHistory.SetRange("Dataset ID", Format(Rec."Dataset ID"));
+                    RefreshHistoryPage.SetTableView(RefreshHistory);
+                    RefreshHistoryPage.Run();
                 end;
             }
         }

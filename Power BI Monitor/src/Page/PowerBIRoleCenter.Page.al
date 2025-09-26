@@ -103,6 +103,22 @@ page 90120 "Power BI Role Center"
                     RunObject = Page "Power BI Reports";
                     ToolTip = 'View and manage Power BI reports and their settings.';
                 }
+                action(DatasetRefreshHistory)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Dataset Refresh History';
+                    Image = History;
+                    RunObject = Page "PBI Dataset Refresh History";
+                    ToolTip = 'View detailed refresh history for all datasets.';
+                }
+                action(DataflowRefreshHistory)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Dataflow Refresh History';
+                    Image = History;
+                    RunObject = Page "PBI Dataflow Refresh History";
+                    ToolTip = 'View detailed refresh history for all dataflows.';
+                }
             }
         }
         area(Creation)

@@ -1,6 +1,4 @@
-# Power BI Monitor- - [License](#license)cense](#license)
-
-## 🎯 Overviewwr Business Central
+# Power BI Monitor
 
 A comprehensive Business Central extension that enables seamless monitoring and management of Microsoft Power BI resources, allowing you to synchronize, track, and monitor Power BI workspaces, datasets, and dataflows directly from Business Central.
 

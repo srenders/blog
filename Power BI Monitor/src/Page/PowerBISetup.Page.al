@@ -91,12 +91,12 @@ page 90114 "Power BI Setup"
 
                 trigger OnAction()
                 var
-                    PowerBIAPI: Codeunit "Power BI API Management";
+                    PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                 begin
-                    if PowerBIAPI.SynchronizeWorkspaces() then
+                    if PowerBIAPIOrchestrator.SynchronizeWorkspaces() then
                         Message('Connection test successful!')
                     else
-                        Message('Connection test failed. Please check your configuration.');
+                        Message('Connection test failed. Please check your configuration and error logs for details.');
                 end;
             }
 

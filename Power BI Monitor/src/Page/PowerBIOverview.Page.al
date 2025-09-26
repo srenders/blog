@@ -88,10 +88,10 @@ page 90128 "Power BI Overview"
 
                     trigger OnAction()
                     var
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
                         if Confirm('Do you want to synchronize all Power BI data? This may take a few minutes.', false) then begin
-                            if PowerBIAPI.SynchronizeAllData() then
+                            if PowerBIAPIOrchestrator.SynchronizeAllData() then
                                 Message('All Power BI data synchronized successfully.')
                             else
                                 Message('Synchronization completed with some errors. Check individual items for details.');
@@ -110,9 +110,9 @@ page 90128 "Power BI Overview"
 
                     trigger OnAction()
                     var
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        if PowerBIAPI.SynchronizeWorkspaces() then begin
+                        if PowerBIAPIOrchestrator.SynchronizeWorkspaces() then begin
                             Message('Workspaces synchronized successfully.');
                             CurrPage.Update(false);
                         end else
@@ -204,9 +204,9 @@ page 90128 "Power BI Overview"
 
                     trigger OnAction()
                     var
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        if PowerBIAPI.SynchronizeWorkspaces() then
+                        if PowerBIAPIOrchestrator.SynchronizeWorkspaces() then
                             Message('Connection test successful!')
                         else
                             Message('Connection test failed. Please check your configuration.');

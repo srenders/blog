@@ -103,6 +103,14 @@ page 90120 "Power BI Role Center"
                     RunObject = Page "Power BI Reports";
                     ToolTip = 'View and manage Power BI reports and their settings.';
                 }
+                action(PowerBIDashboards)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Dashboards';
+                    Image = Grid;
+                    RunObject = Page "Power BI Dashboards";
+                    ToolTip = 'View and manage Power BI dashboards with tile information.';
+                }
                 action(DatasetRefreshHistory)
                 {
                     ApplicationArea = All;

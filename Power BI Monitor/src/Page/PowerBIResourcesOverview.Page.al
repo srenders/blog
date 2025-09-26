@@ -106,14 +106,14 @@ page 90130 "Power BI Resources Overview"
 
                 trigger OnAction()
                 var
-                    PowerBIAPI: Codeunit "Power BI API Management";
+                    PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                 begin
-                    if PowerBIAPI.SynchronizeDatasets(Rec."Workspace ID") and
-                       PowerBIAPI.SynchronizeDataflows(Rec."Workspace ID") then begin
+                    if PowerBIAPIOrchestrator.SynchronizeDatasets(Rec."Workspace ID") and
+                       PowerBIAPIOrchestrator.SynchronizeDataflows(Rec."Workspace ID") then begin
                         Message('Workspace %1 synchronized successfully.', Rec."Workspace Name");
                         CurrPage.Update(false);
                     end else
-                        Message('Failed to synchronize workspace %1.', Rec."Workspace Name");
+                        Message('Failed to synchronize workspace %1. Please check error logs for details.', Rec."Workspace Name");
                 end;
             }
 
@@ -126,14 +126,14 @@ page 90130 "Power BI Resources Overview"
 
                 trigger OnAction()
                 var
-                    PowerBIAPI: Codeunit "Power BI API Management";
+                    PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                 begin
                     if Confirm('Do you want to synchronize all Power BI workspaces? This may take a few minutes.', false) then
-                        if PowerBIAPI.SynchronizeAllData() then begin
+                        if PowerBIAPIOrchestrator.SynchronizeAllData() then begin
                             Message('All workspaces synchronized successfully.');
                             CurrPage.Update(false);
                         end else
-                            Message('Synchronization completed with some errors.');
+                            Message('Synchronization completed with some errors. Please check error logs for details.');
                 end;
             }
         }

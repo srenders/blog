@@ -102,14 +102,14 @@ page 90113 "Power BI Datasets"
 
                     trigger OnAction()
                     var
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
                         if Confirm('Do you want to trigger a refresh for dataset "%1"?', false, Rec."Dataset Name") then
-                            if PowerBIAPI.TriggerDatasetRefresh(Rec."Workspace ID", Rec."Dataset ID") then begin
+                            if PowerBIAPIOrchestrator.TriggerDatasetRefresh(Rec."Workspace ID", Rec."Dataset ID") then begin
                                 Message('Refresh successfully triggered for dataset: %1', Rec."Dataset Name");
                                 CurrPage.Update(false);
                             end else
-                                Message('Failed to trigger refresh for dataset: %1', Rec."Dataset Name");
+                                Error('Failed to trigger refresh for dataset: %1', Rec."Dataset Name");
                     end;
                 }
 
@@ -123,7 +123,7 @@ page 90113 "Power BI Datasets"
                     trigger OnAction()
                     var
                         PowerBIDataset: Record "Power BI Dataset";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         SelectedCount: Integer;
                         SuccessCount: Integer;
                         FailedCount: Integer;
@@ -154,7 +154,7 @@ page 90113 "Power BI Datasets"
                                 if PowerBIDataset.FindSet() then
                                     repeat
                                         if PowerBIDataset."Is Refreshable" then
-                                            if PowerBIAPI.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                            if PowerBIAPIOrchestrator.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
                                                 SuccessCount += 1
                                             else
                                                 FailedCount += 1;
@@ -183,7 +183,7 @@ page 90113 "Power BI Datasets"
                     trigger OnAction()
                     var
                         PowerBIDataset: Record "Power BI Dataset";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         TotalCount: Integer;
                         RefreshableCount: Integer;
                         SuccessCount: Integer;
@@ -208,7 +208,7 @@ page 90113 "Power BI Datasets"
                                 if PowerBIDataset.FindSet() then
                                     repeat
                                         if PowerBIDataset."Is Refreshable" then
-                                            if PowerBIAPI.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                            if PowerBIAPIOrchestrator.TriggerDatasetRefresh(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
                                                 SuccessCount += 1
                                             else
                                                 FailedCount += 1;
@@ -242,13 +242,13 @@ page 90113 "Power BI Datasets"
 
                     trigger OnAction()
                     var
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        if PowerBIAPI.GetDatasetRefreshHistory(Rec."Workspace ID", Rec."Dataset ID") then begin
+                        if PowerBIAPIOrchestrator.GetDatasetRefreshHistory(Rec."Workspace ID", Rec."Dataset ID") then begin
                             CurrPage.Update(false);
                             Message('Refresh history updated for dataset: %1', Rec."Dataset Name");
                         end else
-                            Message('Failed to get refresh history for dataset: %1', Rec."Dataset Name");
+                            Error('Failed to get refresh history for dataset: %1', Rec."Dataset Name");
                     end;
                 }
 
@@ -262,7 +262,7 @@ page 90113 "Power BI Datasets"
                     trigger OnAction()
                     var
                         PowerBIDataset: Record "Power BI Dataset";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         SelectedCount: Integer;
                         SuccessCount: Integer;
                         FailedCount: Integer;
@@ -278,7 +278,7 @@ page 90113 "Power BI Datasets"
                                 CurrPage.SetSelectionFilter(PowerBIDataset);
                                 if PowerBIDataset.FindSet() then
                                     repeat
-                                        if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                        if PowerBIAPIOrchestrator.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;
@@ -307,7 +307,7 @@ page 90113 "Power BI Datasets"
                     trigger OnAction()
                     var
                         PowerBIDataset: Record "Power BI Dataset";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         TotalCount: Integer;
                         SuccessCount: Integer;
                         FailedCount: Integer;
@@ -323,7 +323,7 @@ page 90113 "Power BI Datasets"
                                 PowerBIDataset.CopyFilters(Rec);
                                 if PowerBIDataset.FindSet() then
                                     repeat
-                                        if PowerBIAPI.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                                        if PowerBIAPIOrchestrator.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;

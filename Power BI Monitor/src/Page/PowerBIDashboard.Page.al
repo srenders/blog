@@ -110,14 +110,15 @@ page 90122 "Power BI Dashboard"
 
                     trigger OnAction()
                     var
-                        PowerBIAPIManagement: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        if Confirm('This will synchronize all Power BI workspaces, datasets, and dataflows. Continue?') then begin
-                            PowerBIAPIManagement.SynchronizeWorkspaces();
-                            CalculateStatistics();
-                            LastSyncTime := CurrentDateTime;
-                            Message('Power BI synchronization completed successfully.');
-                        end;
+                        if Confirm('This will synchronize all Power BI workspaces, datasets, and dataflows. Continue?') then
+                            if PowerBIAPIOrchestrator.SynchronizeWorkspaces() then begin
+                                CalculateStatistics();
+                                LastSyncTime := CurrentDateTime;
+                                Message('Power BI synchronization completed successfully.');
+                            end else
+                                Message('Power BI synchronization completed with some errors. Please check error logs for details.');
                     end;
                 }
 
@@ -130,11 +131,13 @@ page 90122 "Power BI Dashboard"
 
                     trigger OnAction()
                     var
-                        PowerBIAPIManagement: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        PowerBIAPIManagement.SynchronizeWorkspaces();
-                        CalculateStatistics();
-                        Message('Workspaces synchronized successfully.');
+                        if PowerBIAPIOrchestrator.SynchronizeWorkspaces() then begin
+                            CalculateStatistics();
+                            Message('Workspaces synchronized successfully.');
+                        end else
+                            Message('Workspace synchronization completed with some errors. Please check error logs for details.');
                     end;
                 }
             }

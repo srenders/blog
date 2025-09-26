@@ -86,12 +86,14 @@ page 90115 "Power BI Dataflows"
 
                     trigger OnAction()
                     var
-                        PowerBIAPIManagement: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
                         if Confirm('Do you want to synchronize all dataflows from Power BI? This may take a moment.', false) then begin
-                            PowerBIAPIManagement.SynchronizeAllData();
+                            if PowerBIAPIOrchestrator.SynchronizeAllDataflows() then
+                                Message('Dataflow synchronization completed successfully.')
+                            else
+                                Message('Dataflow synchronization completed with some errors.');
                             CurrPage.Update(false);
-                            Message('Dataflow synchronization completed.');
                         end;
                     end;
                 }
@@ -105,14 +107,16 @@ page 90115 "Power BI Dataflows"
 
                     trigger OnAction()
                     var
-                        PowerBIAPIManagement: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         EmptyGuid: Guid;
                     begin
                         if Rec."Workspace ID" <> EmptyGuid then begin
                             if Confirm('Do you want to synchronize dataflows for workspace "%1"?', false, GetWorkspaceName()) then begin
-                                PowerBIAPIManagement.SynchronizeDataflows(Rec."Workspace ID");
+                                if PowerBIAPIOrchestrator.SynchronizeDataflows(Rec."Workspace ID") then
+                                    Message('Dataflow synchronization completed successfully for workspace: %1', GetWorkspaceName())
+                                else
+                                    Message('Dataflow synchronization failed for workspace: %1', GetWorkspaceName());
                                 CurrPage.Update(false);
-                                Message('Dataflow synchronization completed for workspace: %1', GetWorkspaceName());
                             end;
                         end else
                             Message('No workspace selected.');
@@ -134,10 +138,10 @@ page 90115 "Power BI Dataflows"
 
                     trigger OnAction()
                     var
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
                         if Confirm('Do you want to trigger a refresh for dataflow "%1"?', false, Rec."Dataflow Name") then
-                            if PowerBIAPI.TriggerDataflowRefresh(Rec."Workspace ID", Rec."Dataflow ID") then begin
+                            if PowerBIAPIOrchestrator.TriggerDataflowRefresh(Rec."Workspace ID", Rec."Dataflow ID") then begin
                                 Message('Refresh successfully triggered for dataflow: %1', Rec."Dataflow Name");
                                 CurrPage.Update(false);
                             end else
@@ -155,7 +159,7 @@ page 90115 "Power BI Dataflows"
                     trigger OnAction()
                     var
                         PowerBIDataflow: Record "Power BI Dataflow";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         SelectedCount: Integer;
                         SuccessCount: Integer;
                         FailedCount: Integer;
@@ -171,7 +175,7 @@ page 90115 "Power BI Dataflows"
                                 CurrPage.SetSelectionFilter(PowerBIDataflow);
                                 if PowerBIDataflow.FindSet() then
                                     repeat
-                                        if PowerBIAPI.TriggerDataflowRefresh(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
+                                        if PowerBIAPIOrchestrator.TriggerDataflowRefresh(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;
@@ -200,7 +204,7 @@ page 90115 "Power BI Dataflows"
                     trigger OnAction()
                     var
                         PowerBIDataflow: Record "Power BI Dataflow";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         TotalCount: Integer;
                         SuccessCount: Integer;
                         FailedCount: Integer;
@@ -216,7 +220,7 @@ page 90115 "Power BI Dataflows"
                                 PowerBIDataflow.CopyFilters(Rec);
                                 if PowerBIDataflow.FindSet() then
                                     repeat
-                                        if PowerBIAPI.TriggerDataflowRefresh(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
+                                        if PowerBIAPIOrchestrator.TriggerDataflowRefresh(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;
@@ -250,9 +254,9 @@ page 90115 "Power BI Dataflows"
 
                     trigger OnAction()
                     var
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        if PowerBIAPI.GetDataflowRefreshHistory(Rec."Workspace ID", Rec."Dataflow ID") then begin
+                        if PowerBIAPIOrchestrator.GetDataflowRefreshHistory(Rec."Workspace ID", Rec."Dataflow ID") then begin
                             CurrPage.Update(false);
                             Message('Refresh history updated for dataflow: %1', Rec."Dataflow Name");
                         end else
@@ -270,7 +274,7 @@ page 90115 "Power BI Dataflows"
                     trigger OnAction()
                     var
                         PowerBIDataflow: Record "Power BI Dataflow";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         SelectedCount: Integer;
                         SuccessCount: Integer;
                         FailedCount: Integer;
@@ -286,7 +290,7 @@ page 90115 "Power BI Dataflows"
                                 CurrPage.SetSelectionFilter(PowerBIDataflow);
                                 if PowerBIDataflow.FindSet() then
                                     repeat
-                                        if PowerBIAPI.GetDataflowRefreshHistory(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
+                                        if PowerBIAPIOrchestrator.GetDataflowRefreshHistory(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;
@@ -315,7 +319,7 @@ page 90115 "Power BI Dataflows"
                     trigger OnAction()
                     var
                         PowerBIDataflow: Record "Power BI Dataflow";
-                        PowerBIAPI: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                         TotalCount: Integer;
                         SuccessCount: Integer;
                         FailedCount: Integer;
@@ -331,7 +335,7 @@ page 90115 "Power BI Dataflows"
                                 PowerBIDataflow.CopyFilters(Rec);
                                 if PowerBIDataflow.FindSet() then
                                     repeat
-                                        if PowerBIAPI.GetDataflowRefreshHistory(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
+                                        if PowerBIAPIOrchestrator.GetDataflowRefreshHistory(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
                                             SuccessCount += 1
                                         else
                                             FailedCount += 1;

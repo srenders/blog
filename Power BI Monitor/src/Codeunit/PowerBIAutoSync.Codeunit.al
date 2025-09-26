@@ -11,7 +11,7 @@ codeunit 90111 "Power BI Auto Sync"
     procedure RunAutoSync()
     var
         PowerBISetup: Record "Power BI Setup";
-        PowerBIAPI: Codeunit "Power BI API Management";
+        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
         SyncSuccessful: Boolean;
     begin
         // Get setup record
@@ -28,7 +28,7 @@ codeunit 90111 "Power BI Auto Sync"
 
         // Run synchronization
         SyncSuccessful := false;
-        if PowerBIAPI.SynchronizeAllData() then begin
+        if PowerBIAPIOrchestrator.SynchronizeAllData() then begin
             SyncSuccessful := true;
 
             // Update last sync time

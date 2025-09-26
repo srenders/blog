@@ -65,13 +65,13 @@ page 90112 "Power BI Workspaces"
 
                 trigger OnAction()
                 var
-                    PowerBIAPI: Codeunit "Power BI API Management";
+                    PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                 begin
-                    if PowerBIAPI.SynchronizeWorkspaces() then begin
+                    if PowerBIAPIOrchestrator.SynchronizeWorkspaces() then begin
                         CurrPage.Update(false);
                         Message('Workspaces synchronized successfully.');
                     end else
-                        Message('Failed to synchronize workspaces. Please check your authentication configuration.');
+                        Message('Failed to synchronize workspaces. Please check your authentication configuration and error logs for details.');
                 end;
             }
 
@@ -84,13 +84,13 @@ page 90112 "Power BI Workspaces"
 
                 trigger OnAction()
                 var
-                    PowerBIAPI: Codeunit "Power BI API Management";
+                    PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                 begin
-                    if PowerBIAPI.SynchronizeDatasets(Rec."Workspace ID") then begin
+                    if PowerBIAPIOrchestrator.SynchronizeDatasets(Rec."Workspace ID") then begin
                         CurrPage.Update(false);
                         Message('Datasets synchronized successfully for workspace: %1', Rec."Workspace Name");
                     end else
-                        Message('Failed to synchronize datasets for workspace: %1', Rec."Workspace Name");
+                        Message('Failed to synchronize datasets for workspace: %1. Please check error logs for details.', Rec."Workspace Name");
                 end;
             }
 

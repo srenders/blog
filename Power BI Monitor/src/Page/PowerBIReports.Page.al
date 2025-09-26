@@ -92,11 +92,13 @@ page 90116 "Power BI Reports"
 
                     trigger OnAction()
                     var
-                        PowerBIAPIManagement: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        PowerBIAPIManagement.SynchronizeReports();
+                        if PowerBIAPIOrchestrator.SynchronizeReports() then
+                            Message('Reports synchronized successfully.')
+                        else
+                            Message('Report synchronization completed with some errors.');
                         CurrPage.Update(false);
-                        Message('Reports synchronized successfully.');
                     end;
                 }
 
@@ -109,14 +111,16 @@ page 90116 "Power BI Reports"
 
                     trigger OnAction()
                     var
-                        PowerBIAPIManagement: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
                         if IsNullGuid(Rec."Workspace ID") then
                             Error('Please select a report first.');
 
-                        PowerBIAPIManagement.SynchronizeReportsForWorkspace(Rec."Workspace ID");
+                        if PowerBIAPIOrchestrator.SynchronizeReportsForWorkspace(Rec."Workspace ID") then
+                            Message('Reports synchronized successfully for selected workspace.')
+                        else
+                            Message('Workspace report synchronization completed with some errors.');
                         CurrPage.Update(false);
-                        Message('Reports synchronized for selected workspace.');
                     end;
                 }
             }

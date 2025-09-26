@@ -79,10 +79,12 @@ page 90121 "Power BI Activities"
 
                     trigger OnDrillDown()
                     var
-                        PowerBIAPIManagement: Codeunit "Power BI API Management";
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
                     begin
-                        PowerBIAPIManagement.SynchronizeWorkspaces();
-                        Message('Power BI synchronization completed.');
+                        if PowerBIAPIOrchestrator.SynchronizeAllData() then
+                            Message('Power BI synchronization completed successfully.')
+                        else
+                            Message('Power BI synchronization completed with some errors.');
                         CurrPage.Update();
                     end;
                 }

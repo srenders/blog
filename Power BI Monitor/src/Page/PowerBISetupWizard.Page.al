@@ -303,7 +303,7 @@ page 90117 "Power BI Setup Wizard"
     var
         MediaRepositoryStandard: Record "Media Repository";
         MediaResourcesStandard: Record "Media Resources";
-        PowerBIAPIManagement: Codeunit "Power BI API Management";
+        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
         Step: Option Welcome,AzureRegistration,APIPermissions,ClientSecret,Configuration,TestConnection,Finish;
         TopBannerVisible: Boolean;
         Step1Visible: Boolean;
@@ -613,7 +613,7 @@ page 90117 "Power BI Setup Wizard"
     begin
         SaveConfiguration();
 
-        if PowerBIAPIManagement.SynchronizeWorkspaces() then begin
+        if PowerBIAPIOrchestrator.SynchronizeWorkspaces() then begin
             ConnectionStatusText := 'Connection successful';
             ConnectionStatusStyle := false;
             ValidateStep6();

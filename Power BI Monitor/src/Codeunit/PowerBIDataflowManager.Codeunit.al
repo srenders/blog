@@ -248,6 +248,9 @@ codeunit 90135 "Power BI Dataflow Manager"
             if PowerBIJsonProcessor.ExtractRefreshInfo(JObject, RefreshType, Status, StartTime, EndTime) then begin
                 TotalCount += 1;
 
+                // Store individual refresh history record
+                StoreDataflowRefreshHistoryRecord(JObject, DataflowId, DataflowRec."Dataflow Name", WorkspaceId, GetWorkspaceName(WorkspaceId));
+
                 // Calculate duration if both times are present
                 if (StartTime <> 0DT) and (EndTime <> 0DT) then begin
                     Duration := (EndTime - StartTime) / 60000; // Convert to minutes
@@ -278,5 +281,102 @@ codeunit 90135 "Power BI Dataflow Manager"
 
         DataflowRec."Last Synchronized" := CurrentDateTime();
         DataflowRec.Modify(true);
+    end;
+
+    /// <summary>
+    /// Store individual dataflow refresh history record
+    /// </summary>
+    /// <param name="JObject">JSON object containing refresh transaction data</param>
+    /// <param name="DataflowId">The dataflow ID</param>
+    /// <param name="DataflowName">The dataflow name</param>
+    /// <param name="WorkspaceId">The workspace ID</param>
+    /// <param name="WorkspaceName">The workspace name</param>
+    local procedure StoreDataflowRefreshHistoryRecord(JObject: JsonObject; DataflowId: Guid; DataflowName: Text; WorkspaceId: Guid; WorkspaceName: Text)
+    var
+        RefreshHistory: Record "PBI Dataflow Refresh History";
+        TransactionId: Text;
+        StartTime: DateTime;
+        EndTime: DateTime;
+        Status: Text;
+        RefreshType: Text;
+        ErrorMessage: Text;
+        StatusEnum: Enum "Power BI Refresh Status";
+    begin
+        // Extract transaction ID
+        TransactionId := PowerBIJsonProcessor.GetTextValue(JObject, 'transactionId', '');
+        if TransactionId = '' then
+            TransactionId := PowerBIJsonProcessor.GetTextValue(JObject, 'id', '');
+
+        if TransactionId = '' then
+            exit;
+
+        // Check if record already exists
+        RefreshHistory.SetRange("Transaction ID", TransactionId);
+        if RefreshHistory.FindFirst() then
+            exit; // Already processed
+
+        // Create new record
+        RefreshHistory.Init();
+        RefreshHistory."Dataflow ID" := CopyStr(Format(DataflowId), 1, MaxStrLen(RefreshHistory."Dataflow ID"));
+        RefreshHistory."Dataflow Name" := CopyStr(DataflowName, 1, MaxStrLen(RefreshHistory."Dataflow Name"));
+        RefreshHistory."Workspace ID" := CopyStr(Format(WorkspaceId), 1, MaxStrLen(RefreshHistory."Workspace ID"));
+        RefreshHistory."Workspace Name" := CopyStr(WorkspaceName, 1, MaxStrLen(RefreshHistory."Workspace Name"));
+        RefreshHistory."Transaction ID" := CopyStr(TransactionId, 1, MaxStrLen(RefreshHistory."Transaction ID"));
+
+        // Extract and store refresh details
+        StartTime := PowerBIJsonProcessor.GetDateTimeValue(JObject, 'startTime');
+        RefreshHistory."Start Time" := StartTime;
+
+        EndTime := PowerBIJsonProcessor.GetDateTimeValue(JObject, 'endTime');
+        RefreshHistory."End Time" := EndTime;
+
+        // Calculate duration
+        if (StartTime <> 0DT) and (EndTime <> 0DT) then
+            RefreshHistory."Duration (Minutes)" := (EndTime - StartTime) / 60000; // Convert milliseconds to minutes
+
+        // Extract and convert status
+        Status := PowerBIJsonProcessor.GetTextValue(JObject, 'status', '');
+        RefreshType := PowerBIJsonProcessor.GetTextValue(JObject, 'refreshType', '');
+        RefreshHistory."Refresh Type" := CopyStr(RefreshType, 1, MaxStrLen(RefreshHistory."Refresh Type"));
+
+        // Convert status text to enum
+        case UpperCase(Status) of
+            'COMPLETED':
+                StatusEnum := StatusEnum::Completed;
+            'FAILED':
+                StatusEnum := StatusEnum::Failed;
+            'IN PROGRESS', 'INPROGRESS':
+                StatusEnum := StatusEnum::"In Progress";
+            'DISABLED':
+                StatusEnum := StatusEnum::Disabled;
+            'NOTSTARTED':
+                StatusEnum := StatusEnum::NotStarted;
+            else
+                StatusEnum := StatusEnum::Unknown;
+        end;
+        RefreshHistory.Status := StatusEnum;
+
+        // Extract error message if present
+        ErrorMessage := PowerBIJsonProcessor.GetTextValue(JObject, 'error', '');
+        if ErrorMessage = '' then
+            ErrorMessage := PowerBIJsonProcessor.GetTextValue(JObject, 'errorMessage', '');
+        RefreshHistory."Error Message" := CopyStr(ErrorMessage, 1, MaxStrLen(RefreshHistory."Error Message"));
+
+        RefreshHistory."Created DateTime" := CurrentDateTime();
+        RefreshHistory.Insert(true);
+    end;
+
+    /// <summary>
+    /// Get workspace name by workspace ID
+    /// </summary>
+    /// <param name="WorkspaceId">The workspace ID</param>
+    /// <returns>The workspace name</returns>
+    local procedure GetWorkspaceName(WorkspaceId: Guid): Text
+    var
+        PowerBIWorkspace: Record "Power BI Workspace";
+    begin
+        if PowerBIWorkspace.Get(WorkspaceId) then
+            exit(PowerBIWorkspace."Workspace Name");
+        exit('');
     end;
 }

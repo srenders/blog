@@ -60,7 +60,7 @@ codeunit 90135 "Power BI Dataflow Manager"
     end;
 
     /// <summary>
-    /// Processes dataflow data from Power BI API response
+    /// Processes dataflow data from Power BI API response and updates refresh history
     /// </summary>
     /// <param name="WorkspaceId">The workspace ID these dataflows belong to</param>
     /// <param name="JsonArray">Array of dataflow objects from API</param>
@@ -70,14 +70,20 @@ codeunit 90135 "Power BI Dataflow Manager"
         JToken: JsonToken;
         JObject: JsonObject;
         Counter: Integer;
+        RefreshHistoryCounter: Integer;
     begin
         Counter := 0;
+        RefreshHistoryCounter := 0;
         foreach JToken in JsonArray do begin
             JObject := JToken.AsObject();
-            if StoreDataflow(WorkspaceId, JObject, DataflowRec) then
+            if StoreDataflow(WorkspaceId, JObject, DataflowRec) then begin
                 Counter += 1;
+                // Also get refresh history for each dataflow to populate refresh-related fields
+                if GetDataflowRefreshHistory(WorkspaceId, DataflowRec."Dataflow ID") then
+                    RefreshHistoryCounter += 1;
+            end;
         end;
-        Message('Successfully processed %1 dataflows for workspace', Counter);
+        Message('Successfully processed %1 dataflows and updated refresh history for %2 dataflows', Counter, RefreshHistoryCounter);
     end;
 
     /// <summary>
@@ -90,27 +96,29 @@ codeunit 90135 "Power BI Dataflow Manager"
     local procedure StoreDataflow(WorkspaceId: Guid; JsonObj: JsonObject; var DataflowRec: Record "Power BI Dataflow"): Boolean
     var
         DataflowId: Guid;
-        DataflowName: Text[100];
-        Description: Text[250];
+        DataflowName: Text;
+        Description: Text;
+        ConfiguredBy: Text;
+        WebUrl: Text;
     begin
-        // Extract basic information
-        DataflowId := PowerBIJsonProcessor.GetGuidValue(JsonObj, 'objectId');
-        if IsNullGuid(DataflowId) then
+        // Extract dataflow information using proper JSON processor
+        if not PowerBIJsonProcessor.ExtractDataflowInfo(JsonObj, DataflowId, DataflowName, Description, ConfiguredBy) then
             exit(false);
 
-        DataflowName := CopyStr(PowerBIJsonProcessor.GetTextValue(JsonObj, 'name', ''), 1, MaxStrLen(DataflowName));
-        Description := CopyStr(PowerBIJsonProcessor.GetTextValue(JsonObj, 'description', ''), 1, MaxStrLen(Description));
-
         // Find or create dataflow record
-        if not DataflowRec.Get(DataflowId) then begin
+        if not DataflowRec.Get(DataflowId, WorkspaceId) then begin
             DataflowRec.Init();
             DataflowRec."Dataflow ID" := DataflowId;
+            DataflowRec."Workspace ID" := WorkspaceId;
         end;
 
-        // Update dataflow information
-        DataflowRec."Workspace ID" := WorkspaceId;
-        DataflowRec."Dataflow Name" := DataflowName;
-        DataflowRec."Description" := Description;
+        // Update dataflow information with proper text length handling
+        DataflowRec."Dataflow Name" := CopyStr(DataflowName, 1, MaxStrLen(DataflowRec."Dataflow Name"));
+        DataflowRec."Description" := CopyStr(Description, 1, MaxStrLen(DataflowRec."Description"));
+        DataflowRec."Configured By" := CopyStr(ConfiguredBy, 1, MaxStrLen(DataflowRec."Configured By"));
+
+        WebUrl := PowerBIJsonProcessor.BuildDataflowWebUrl(WorkspaceId, DataflowId);
+        DataflowRec."Web URL" := CopyStr(WebUrl, 1, MaxStrLen(DataflowRec."Web URL"));
         DataflowRec."Last Synchronized" := CurrentDateTime();
 
         // Save record
@@ -200,8 +208,75 @@ codeunit 90135 "Power BI Dataflow Manager"
         if not PowerBIHttpClient.ValidateJsonArrayResponse(ResponseText, JsonArray) then
             exit(false);
 
-        // For now, just return success. In a full implementation, you would
-        // process the refresh history and store it in appropriate tables
+        // Process refresh history and update dataflow record
+        ProcessDataflowRefreshHistory(WorkspaceId, DataflowId, JsonArray);
         exit(true);
+    end;
+
+    /// <summary>
+    /// Processes dataflow refresh history and updates the dataflow record with latest refresh information
+    /// </summary>
+    /// <param name="WorkspaceId">The workspace ID</param>
+    /// <param name="DataflowId">The dataflow ID</param>
+    /// <param name="JsonArray">Array of refresh transaction objects</param>
+    local procedure ProcessDataflowRefreshHistory(WorkspaceId: Guid; DataflowId: Guid; JsonArray: JsonArray)
+    var
+        DataflowRec: Record "Power BI Dataflow";
+        JToken: JsonToken;
+        JObject: JsonObject;
+        RefreshType: Text;
+        Status: Text;
+        StartTime: DateTime;
+        EndTime: DateTime;
+        Duration: Decimal;
+        TotalDuration: Decimal;
+        SuccessfulCount: Integer;
+        TotalCount: Integer;
+        IsFirst: Boolean;
+    begin
+        if not DataflowRec.Get(DataflowId, WorkspaceId) then
+            exit;
+
+        IsFirst := true;
+        TotalDuration := 0;
+        SuccessfulCount := 0;
+        TotalCount := 0;
+
+        // Process each refresh transaction
+        foreach JToken in JsonArray do begin
+            JObject := JToken.AsObject();
+            if PowerBIJsonProcessor.ExtractRefreshInfo(JObject, RefreshType, Status, StartTime, EndTime) then begin
+                TotalCount += 1;
+
+                // Calculate duration if both times are present
+                if (StartTime <> 0DT) and (EndTime <> 0DT) then begin
+                    Duration := (EndTime - StartTime) / 60000; // Convert to minutes
+                    TotalDuration += Duration;
+                end;
+
+                // Count successful refreshes
+                if Status = 'Completed' then
+                    SuccessfulCount += 1;
+
+                // Update with latest refresh info (first item is most recent)
+                if IsFirst then begin
+                    DataflowRec."Last Refresh" := StartTime;
+                    DataflowRec."Last Refresh Status" := CopyStr(Status, 1, MaxStrLen(DataflowRec."Last Refresh Status"));
+                    if Duration > 0 then
+                        DataflowRec."Last Refresh Duration (Min)" := Duration;
+                    IsFirst := false;
+                end;
+            end;
+        end;
+
+        // Update aggregate statistics
+        if TotalCount > 0 then begin
+            DataflowRec."Refresh Count" := TotalCount;
+            if SuccessfulCount > 0 then
+                DataflowRec."Average Refresh Duration (Min)" := TotalDuration / SuccessfulCount;
+        end;
+
+        DataflowRec."Last Synchronized" := CurrentDateTime();
+        DataflowRec.Modify(true);
     end;
 }

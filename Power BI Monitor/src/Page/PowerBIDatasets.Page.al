@@ -81,6 +81,16 @@ page 90113 "Power BI Datasets"
                 }
             }
         }
+
+        area(factboxes)
+        {
+            part(RefreshHistoryFactBox; "PBI Dataset Refresh ListPart")
+            {
+                ApplicationArea = All;
+                Caption = 'Refresh History';
+                SubPageLink = "Dataset ID" = field("Dataset ID");
+            }
+        }
     }
 
     actions

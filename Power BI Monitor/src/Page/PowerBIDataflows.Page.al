@@ -66,6 +66,16 @@ page 90115 "Power BI Dataflows"
                 }
             }
         }
+
+        area(FactBoxes)
+        {
+            part(RefreshHistoryFactBox; "PBI Dataflow Refresh ListPart")
+            {
+                ApplicationArea = All;
+                Caption = 'Dataflow Refresh History';
+                SubPageLink = "Dataflow ID" = field("Dataflow ID");
+            }
+        }
     }
 
     actions

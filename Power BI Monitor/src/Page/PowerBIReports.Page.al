@@ -62,6 +62,13 @@ page 90116 "Power BI Reports"
         }
         area(FactBoxes)
         {
+            part(RefreshHistoryFactBox; "PBI Report Dataset RefreshList")
+            {
+                ApplicationArea = All;
+                Caption = 'Dataset Refresh History';
+                SubPageLink = "Dataset ID" = field("Dataset ID");
+            }
+
             systempart(Control1900383207; Links)
             {
                 ApplicationArea = All;

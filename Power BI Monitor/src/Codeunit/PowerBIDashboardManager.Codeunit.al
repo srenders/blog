@@ -44,10 +44,8 @@ codeunit 90136 "Power BI Dashboard Manager"
         TotalCount: Integer;
     begin
         WorkspaceRec.SetRange("Sync Enabled", true);
-        if not WorkspaceRec.FindSet() then begin
-            Message('No workspaces found for dashboard synchronization');
+        if not WorkspaceRec.FindSet() then
             exit(true);
-        end;
 
         repeat
             TotalCount += 1;
@@ -55,7 +53,7 @@ codeunit 90136 "Power BI Dashboard Manager"
                 SuccessCount += 1;
         until WorkspaceRec.Next() = 0;
 
-        Message('Synchronized dashboards for %1 of %2 workspaces', SuccessCount, TotalCount);
+        // Message('Synchronized dashboards for %1 of %2 workspaces', SuccessCount, TotalCount);
         exit(SuccessCount > 0);
     end;
 
@@ -77,7 +75,7 @@ codeunit 90136 "Power BI Dashboard Manager"
             if StoreDashboard(WorkspaceId, JObject, DashboardRec) then
                 Counter += 1;
         end;
-        Message('Successfully processed %1 dashboards for workspace', Counter);
+        // Message('Successfully processed %1 dashboards for workspace', Counter);
     end;
 
     /// <summary>

@@ -44,10 +44,8 @@ codeunit 90137 "Power BI Report Manager"
         TotalCount: Integer;
     begin
         WorkspaceRec.SetRange("Sync Enabled", true);
-        if not WorkspaceRec.FindSet() then begin
-            Message('No workspaces found for report synchronization');
+        if not WorkspaceRec.FindSet() then
             exit(true);
-        end;
 
         repeat
             TotalCount += 1;
@@ -55,7 +53,7 @@ codeunit 90137 "Power BI Report Manager"
                 SuccessCount += 1;
         until WorkspaceRec.Next() = 0;
 
-        Message('Synchronized reports for %1 of %2 workspaces', SuccessCount, TotalCount);
+        // Message('Synchronized reports for %1 of %2 workspaces', SuccessCount, TotalCount);
         exit(SuccessCount > 0);
     end;
 
@@ -77,7 +75,7 @@ codeunit 90137 "Power BI Report Manager"
             if StoreReport(WorkspaceId, JObject, ReportRec) then
                 Counter += 1;
         end;
-        Message('Successfully processed %1 reports for workspace', Counter);
+        // Message('Successfully processed %1 reports for workspace', Counter);
     end;
 
     /// <summary>

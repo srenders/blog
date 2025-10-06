@@ -187,6 +187,15 @@ page 90122 "Power BI Dashboard"
             {
                 Caption = 'Analysis';
 
+                action(RefreshErrors)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Refresh Errors Overview';
+                    Image = ErrorLog;
+                    RunObject = Page "Power BI Refresh Errors";
+                    ToolTip = 'View comprehensive overview of all Power BI refresh errors with detailed statistics and drill-down capabilities.';
+                }
+
                 action(ViewFailedRefreshes)
                 {
                     ApplicationArea = All;

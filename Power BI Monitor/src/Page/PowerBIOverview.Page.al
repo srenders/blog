@@ -178,6 +178,24 @@ page 90128 "Power BI Overview"
                 }
             }
 
+            group(Monitoring)
+            {
+                Caption = 'Monitoring';
+
+                action(RefreshErrors)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Refresh Errors';
+                    Image = ErrorLog;
+                    ToolTip = 'View comprehensive overview of Power BI refresh errors';
+
+                    trigger OnAction()
+                    begin
+                        Page.Run(Page::"Power BI Refresh Errors");
+                    end;
+                }
+            }
+
             group(Configuration)
             {
                 Caption = 'Configuration';

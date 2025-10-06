@@ -28,17 +28,11 @@ codeunit 90134 "Power BI Workspace Manager"
             exit(false);
 
         // Check for empty results
-        if JsonArray.Count() = 0 then begin
-            Message('No workspaces found. This means:\n' +
-                    '1. Service principal has no workspace access\n' +
-                    '2. Add Client ID to workspace members\n' +
-                    '3. Or enable tenant-wide service principal access\n' +
-                    '4. Workspaces need Admin/Member permissions for service principals');
+        if JsonArray.Count() = 0 then
             exit(true);
-        end;
 
         // Process workspaces
-        Message('Found %1 workspaces in API response', JsonArray.Count());
+        // Message('Found %1 workspaces in API response', JsonArray.Count());
         ProcessWorkspaces(JsonArray);
         exit(true);
     end;
@@ -60,7 +54,7 @@ codeunit 90134 "Power BI Workspace Manager"
             if StoreWorkspace(JObject, WorkspaceRec) then
                 Counter += 1;
         end;
-        Message('Successfully processed %1 workspaces', Counter);
+        // Message('Successfully processed %1 workspaces', Counter);
     end;
 
     /// <summary>

@@ -218,9 +218,9 @@ codeunit 90120 "Power BI API Orchestrator"
         if ReportsSuccess then SuccessCount += 1;
 
         // Report results
-        Message('Synchronization Results:\nWorkspaces: %1\nDatasets: %2\nDataflows: %3\nDashboards: %4\nReports: %5\n\nTotal Success: %6/5',
-            Format(WorkspacesSuccess), Format(DatasetsSuccess), Format(DataflowsSuccess),
-            Format(DashboardsSuccess), Format(ReportsSuccess), SuccessCount);
+        // Message('Synchronization Results:\nWorkspaces: %1\nDatasets: %2\nDataflows: %3\nDashboards: %4\nReports: %5\n\nTotal Success: %6/5',
+        //     Format(WorkspacesSuccess), Format(DatasetsSuccess), Format(DataflowsSuccess),
+        //     Format(DashboardsSuccess), Format(ReportsSuccess), SuccessCount);
 
         // Return true if at least workspaces succeeded (minimum requirement)
         exit(WorkspacesSuccess);
@@ -237,10 +237,8 @@ codeunit 90120 "Power BI API Orchestrator"
         TotalCount: Integer;
     begin
         WorkspaceRec.SetRange("Sync Enabled", true);
-        if not WorkspaceRec.FindSet() then begin
-            Message('No workspaces found for dataset synchronization');
+        if not WorkspaceRec.FindSet() then
             exit(true);
-        end;
 
         repeat
             TotalCount += 1;
@@ -248,7 +246,7 @@ codeunit 90120 "Power BI API Orchestrator"
                 SuccessCount += 1;
         until WorkspaceRec.Next() = 0;
 
-        Message('Synchronized datasets for %1 of %2 workspaces', SuccessCount, TotalCount);
+        // Message('Synchronized datasets for %1 of %2 workspaces', SuccessCount, TotalCount);
         exit(SuccessCount > 0);
     end;
 
@@ -294,5 +292,35 @@ codeunit 90120 "Power BI API Orchestrator"
     procedure ValidateReport(ReportId: Guid): Boolean
     begin
         exit(PowerBIReportManager.ValidateReport(ReportId));
+    end;
+
+    /// <summary>
+    /// Refreshes refresh history for all datasets and dataflows
+    /// </summary>
+    /// <returns>True if refresh history update was successful</returns>
+    procedure RefreshAllRefreshHistory(): Boolean
+    var
+        PowerBIDataset: Record "Power BI Dataset";
+        PowerBIDataflow: Record "Power BI Dataflow";
+        SuccessCount: Integer;
+        TotalCount: Integer;
+    begin
+        // Refresh dataset refresh history
+        if PowerBIDataset.FindSet() then
+            repeat
+                TotalCount += 1;
+                if PowerBIDatasetManager.GetDatasetRefreshHistory(PowerBIDataset."Workspace ID", PowerBIDataset."Dataset ID") then
+                    SuccessCount += 1;
+            until PowerBIDataset.Next() = 0;
+
+        // Refresh dataflow refresh history  
+        if PowerBIDataflow.FindSet() then
+            repeat
+                TotalCount += 1;
+                if PowerBIDataflowManager.GetDataflowRefreshHistory(PowerBIDataflow."Workspace ID", PowerBIDataflow."Dataflow ID") then
+                    SuccessCount += 1;
+            until PowerBIDataflow.Next() = 0;
+
+        exit(SuccessCount > 0);
     end;
 }

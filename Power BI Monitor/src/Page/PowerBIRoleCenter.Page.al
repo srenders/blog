@@ -127,6 +127,14 @@ page 90120 "Power BI Role Center"
                     RunObject = Page "PBI Dataflow Refresh History";
                     ToolTip = 'View detailed refresh history for all dataflows.';
                 }
+                action(RefreshErrors)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Refresh Errors';
+                    Image = ErrorLog;
+                    RunObject = Page "Power BI Refresh Errors";
+                    ToolTip = 'View comprehensive overview of Power BI refresh errors with drill-down capabilities.';
+                }
             }
         }
         area(Creation)

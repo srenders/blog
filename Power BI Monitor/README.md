@@ -30,6 +30,8 @@ A comprehensive Business Central extension that enables seamless monitoring and 
 - **Refresh Summary**: Detailed summary views for individual refresh operations
 - **Cross-Navigation**: Easy navigation between related pages and data
 - **Error Analysis**: Comprehensive error detail viewing for failed operations
+- **Comprehensive Error Monitoring**: Dedicated error overview dashboard with 30-day statistics and drill-down capabilities
+- **Streamlined Sync Messages**: Reduced sync message noise from 5 messages to 1 essential message
 
 #### 🛠️ **Reliability Improvements**
 - Fixed GUID comparison issues in dataflow synchronization
@@ -76,6 +78,15 @@ The Power BI Monitor extension bridges Business Central and Power BI, providing:
 - **Error Analysis**: Detailed error information for troubleshooting failed operations
 - **Status Filtering**: Quick access to failed operations for immediate attention
 - Cross-resource analytics and reporting capabilities
+
+### 🚨 Error Monitoring & Alerting
+- **Comprehensive Error Dashboard**: Unified view of all Power BI refresh errors with summary statistics
+- **30-Day Error Statistics**: Dataset and dataflow error counts over the last 30 days
+- **Recent Error Summary**: Quick overview of recent errors from the last 7 days
+- **Error Drill-Down**: Navigate from summary statistics to detailed error records
+- **Most Recent Error Tracking**: Display when the last error occurred across all resources
+- **Integrated Navigation**: Access error monitoring from multiple entry points in the application
+- **Real-Time Error Data**: Refresh error statistics on-demand with comprehensive data updates
 
 ### 🎨 Enhanced User Experience
 - **Organized Action Groups**: Logically grouped actions (Refresh, History, Filters)
@@ -213,6 +224,14 @@ Enter the following in Power BI Setup:
 - **Refresh Summary**: Detailed summary views for individual refresh operations
 - **Cross-Navigation**: Easy navigation between history and source resources
 
+#### Error Monitoring Dashboard
+- **Access Methods**: Available via Tell Me search, Power BI Role Center, or integrated navigation
+- **Error Overview**: View 30-day error statistics for both datasets and dataflows
+- **Recent Errors**: Quick summary of errors from the last 7 days with drill-down capabilities
+- **Error Drill-Down**: Click on error counts to view filtered lists of specific error types
+- **Data Refresh**: Update error statistics on-demand using the refresh action
+- **Cross-Navigation**: Navigate to dataset/dataflow management pages from error context
+
 ### Automation
 
 #### Auto-Sync Setup
@@ -243,6 +262,10 @@ Configure dataset refreshes to run automatically:
 - **PBI Dataset Refresh History** (90120): Detailed dataset refresh tracking
 - **PBI Dataflow Refresh History** (90121): Detailed dataflow refresh tracking
 
+#### Error Monitoring Pages (v1.3.0+)
+- **Power BI Refresh Errors** (90145): Comprehensive error dashboard with 30-day statistics
+- **Power BI Recent Errors List** (90146): CardPart component for recent error summaries
+
 #### Service-Oriented Architecture (v1.2.0+)
 
 **Core Orchestration Layer:**
@@ -264,6 +287,8 @@ Configure dataset refreshes to run automatically:
 #### User Interface
 - **Resource Management Pages**: Enhanced interfaces for workspaces, datasets, dataflows, and reports
 - **Refresh History Pages**: Dedicated pages for detailed refresh history analysis
+- **Error Monitoring Dashboard**: Comprehensive error overview with statistics and drill-down capabilities
+- **Error Summary Components**: Reusable CardPart for integrated error monitoring
 - **Role Center**: Dedicated Power BI management workspace with quick access to all features
 - **Setup Wizard**: Guided configuration experience for easy setup
 - **Overview Pages**: Dashboard-style summaries with performance metrics
@@ -534,7 +559,16 @@ After setup, explore these features:
 
 ## 📝 Change Log
 
-### Version 1.2.0 (Latest) - Architecture Modernization
+### Version 1.3.0 (Latest) - Error Monitoring & User Experience
+- 🚨 **Comprehensive Error Monitoring**: New error dashboard with 30-day statistics and drill-down capabilities
+- 📊 **Error Analytics**: Detailed error tracking for both datasets and dataflows with recent error summaries
+- 🎯 **Streamlined User Experience**: Reduced sync message noise from 5 to 1 essential message
+- 🔍 **Multiple Access Points**: Error monitoring accessible via Tell Me, Role Center, and integrated navigation
+- 📈 **Real-Time Error Updates**: On-demand refresh of error statistics and comprehensive data updates
+- ✨ **Enhanced Navigation**: Integrated error monitoring across all main Power BI management pages
+- 🎨 **CardPart Integration**: Reusable error summary component for integration into other pages
+
+### Version 1.2.0 - Architecture Modernization
 - 🏗️ **Service-Oriented Architecture**: Complete migration from monolithic to service-oriented design
 - 🔧 **Enhanced Error Handling**: Improved error detection with actionable user feedback
 - 📦 **Specialized Managers**: Dedicated managers for each Power BI resource type

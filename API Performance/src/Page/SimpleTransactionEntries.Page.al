@@ -5,6 +5,8 @@ page 91100 "Simple Transaction Entries"
     SourceTable = "Simple Transaction Entry";
     UsageCategory = Lists;
     ApplicationArea = All;
+    Editable = false;
+    SourceTableView = sorting("Entry No.") order(descending);
 
     layout
     {
@@ -119,6 +121,117 @@ page 91100 "Simple Transaction Entries"
                         Message('All records have been deleted successfully.');
                     end;
                 end;
+            }
+        }
+
+        area(navigation)
+        {
+            group(BulkOperations)
+            {
+                Caption = 'Bulk Operations (All Tables)';
+
+                action(InsertTestDataAllTables)
+                {
+                    Caption = 'Populate ALL Table Variants';
+                    ApplicationArea = All;
+                    Image = CreateMovement;
+                    ToolTip = 'Insert identical test records into all 4 table variants for performance comparison.';
+
+                    trigger OnAction()
+                    var
+                        TestDataMgt: Codeunit "Simple Transaction Test Data";
+                        NumberInputDialog: Page "Number Input Dialog";
+                        NumberOfRecords: Integer;
+                    begin
+                        if NumberInputDialog.RunModal() = Action::OK then begin
+                            NumberOfRecords := NumberInputDialog.GetNumberOfRecords();
+                            TestDataMgt.InsertTestRecordsAllTables(NumberOfRecords);
+                            CurrPage.Update(false);
+                        end;
+                    end;
+                }
+
+                action(DeleteTestDataAllTables)
+                {
+                    Caption = 'Delete Test Data (All Tables)';
+                    ApplicationArea = All;
+                    Image = DeleteRow;
+                    ToolTip = 'Delete all test records (TEST-*) from all 4 table variants.';
+
+                    trigger OnAction()
+                    var
+                        TestDataMgt: Codeunit "Simple Transaction Test Data";
+                    begin
+                        TestDataMgt.DeleteAllTestDataAllTables();
+                        CurrPage.Update(false);
+                    end;
+                }
+
+                action(DeleteAllDataAllTables)
+                {
+                    Caption = 'Delete ALL Data (All Tables)';
+                    ApplicationArea = All;
+                    Image = Delete;
+                    ToolTip = 'Delete all records from all 4 table variants. WARNING: This cannot be undone!';
+
+                    trigger OnAction()
+                    var
+                        TestDataMgt: Codeunit "Simple Transaction Test Data";
+                    begin
+                        TestDataMgt.DeleteAllRecordsAllTables();
+                        CurrPage.Update(false);
+                    end;
+                }
+            }
+
+            group(OtherVariants)
+            {
+                Caption = 'Other Table Variants';
+
+                action(OpenNoCovers)
+                {
+                    Caption = 'No Covering Indexes';
+                    ApplicationArea = All;
+                    Image = Database;
+                    ToolTip = 'Open the table variant without covering indexes.';
+
+                    trigger OnAction()
+                    var
+                        SimpleTransNoCoversList: Page "Simple Trans No Covers List";
+                    begin
+                        SimpleTransNoCoversList.Run();
+                    end;
+                }
+
+                action(OpenMinimal)
+                {
+                    Caption = 'Minimal Keys';
+                    ApplicationArea = All;
+                    Image = Database;
+                    ToolTip = 'Open the table variant with only primary key.';
+
+                    trigger OnAction()
+                    var
+                        SimpleTransMinimalList: Page "Simple Trans Minimal List";
+                    begin
+                        SimpleTransMinimalList.Run();
+                    end;
+                }
+
+                action(OpenAltCover)
+                {
+                    Caption = 'Alternative Covering';
+                    ApplicationArea = All;
+                    Image = Database;
+                    ToolTip = 'Open the table variant with alternative covering strategy.';
+
+                    trigger OnAction()
+                    var
+                        SimpleTransAltCoverList: Page "Simple Trans Alt Cover List";
+                    begin
+                        SimpleTransAltCoverList.Run();
+                    end;
+                }
             }
         }
     }

@@ -79,6 +79,34 @@ page 90128 "Power BI Overview"
             {
                 Caption = 'Synchronization';
 
+                action(CleanupAndResync)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Cleanup and Resync';
+                    Image = ClearLog;
+                    ToolTip = 'Delete all Power BI data from BC and re-synchronize from Power BI. Use this when resources have been deleted/recreated in Power BI.';
+
+                    trigger OnAction()
+                    var
+                        PowerBIAPIOrchestrator: Codeunit "Power BI API Orchestrator";
+                    begin
+                        if Confirm('This will delete all Power BI data from Business Central and re-synchronize from Power BI.' +
+                                   '\This is useful when resources have been deleted/recreated in Power BI.' +
+                                   '\\Do you want to continue?', false) then begin
+                            PowerBIAPIOrchestrator.ClearAllPowerBIData();
+                            Message('All Power BI data has been cleared from Business Central.');
+
+                            if Confirm('Data cleared. Do you want to synchronize all data from Power BI now?', true) then
+                                if PowerBIAPIOrchestrator.SynchronizeAllData() then
+                                    Message('All Power BI data synchronized successfully.')
+                                else
+                                    Message('Synchronization completed with some errors. Check individual items for details.');
+
+                            CurrPage.Update(false);
+                        end;
+                    end;
+                }
+
                 action(SyncAllData)
                 {
                     ApplicationArea = All;

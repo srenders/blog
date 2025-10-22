@@ -323,4 +323,45 @@ codeunit 90120 "Power BI API Orchestrator"
 
         exit(SuccessCount > 0);
     end;
+    // =======================
+    // CLEANUP OPERATIONS
+    // =======================
+
+    /// <summary>
+    /// Clears all Power BI data from Business Central tables
+    /// Use this when resources have been deleted/recreated in Power BI
+    /// </summary>
+    procedure ClearAllPowerBIData()
+    var
+        PowerBIWorkspace: Record "Power BI Workspace";
+        PowerBIDataset: Record "Power BI Dataset";
+        PowerBIDataflow: Record "Power BI Dataflow";
+        PowerBIDashboard: Record "Power BI Dashboard";
+        PowerBIReport: Record "Power BI Report";
+        DatasetRefreshHistory: Record "PBI Dataset Refresh History";
+        DataflowRefreshHistory: Record "PBI Dataflow Refresh History";
+    begin
+        // Delete refresh history first (foreign key dependencies)
+        DatasetRefreshHistory.DeleteAll(true);
+        DataflowRefreshHistory.DeleteAll(true);
+
+        // Delete resources
+        PowerBIDataset.DeleteAll(true);
+        PowerBIDataflow.DeleteAll(true);
+        PowerBIDashboard.DeleteAll(true);
+        PowerBIReport.DeleteAll(true);
+
+        // Delete workspaces last
+        PowerBIWorkspace.DeleteAll(true);
+    end;
+
+    /// <summary>
+    /// Clears all Power BI data and re-synchronizes everything from Power BI
+    /// </summary>
+    /// <returns>True if cleanup and sync were successful</returns>
+    procedure CleanupAndResync(): Boolean
+    begin
+        ClearAllPowerBIData();
+        exit(SynchronizeAllData());
+    end;
 }

@@ -14,6 +14,7 @@ table 90111 "Power BI Dataset"
         {
             Caption = 'Workspace ID';
             TableRelation = "Power BI Workspace"."Workspace ID";
+            ValidateTableRelation = false;
         }
 
         field(3; "Dataset Name"; Text[100])

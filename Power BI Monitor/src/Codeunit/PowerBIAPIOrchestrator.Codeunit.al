@@ -204,15 +204,19 @@ codeunit 90120 "Power BI API Orchestrator"
         // Synchronize in order of dependency
         WorkspacesSuccess := SynchronizeWorkspaces();
         if WorkspacesSuccess then SuccessCount += 1;
+        Commit(); // Ensure workspaces are committed before syncing child resources
 
         DatasetsSuccess := SynchronizeAllDatasets();
         if DatasetsSuccess then SuccessCount += 1;
+        Commit(); // Commit datasets before dataflows/reports that may reference them
 
         DataflowsSuccess := SynchronizeAllDataflows();
         if DataflowsSuccess then SuccessCount += 1;
+        Commit();
 
         DashboardsSuccess := SynchronizeAllDashboards();
         if DashboardsSuccess then SuccessCount += 1;
+        Commit();
 
         ReportsSuccess := SynchronizeAllReports();
         if ReportsSuccess then SuccessCount += 1;
@@ -268,10 +272,11 @@ codeunit 90120 "Power BI API Orchestrator"
     /// Validates if a dataflow exists and is accessible
     /// </summary>
     /// <param name="DataflowId">The dataflow ID to validate</param>
+    /// <param name="WorkspaceId">The workspace ID to validate</param>
     /// <returns>True if dataflow is valid and accessible</returns>
-    procedure ValidateDataflow(DataflowId: Guid): Boolean
+    procedure ValidateDataflow(DataflowId: Guid; WorkspaceId: Guid): Boolean
     begin
-        exit(PowerBIDataflowManager.ValidateDataflow(DataflowId));
+        exit(PowerBIDataflowManager.ValidateDataflow(DataflowId, WorkspaceId));
     end;
 
     /// <summary>
@@ -288,10 +293,11 @@ codeunit 90120 "Power BI API Orchestrator"
     /// Validates if a report exists and is accessible
     /// </summary>
     /// <param name="ReportId">The report ID to validate</param>
+    /// <param name="WorkspaceId">The workspace ID to validate</param>
     /// <returns>True if report is valid and accessible</returns>
-    procedure ValidateReport(ReportId: Guid): Boolean
+    procedure ValidateReport(ReportId: Guid; WorkspaceId: Guid): Boolean
     begin
-        exit(PowerBIReportManager.ValidateReport(ReportId));
+        exit(PowerBIReportManager.ValidateReport(ReportId, WorkspaceId));
     end;
 
     /// <summary>
@@ -342,17 +348,17 @@ codeunit 90120 "Power BI API Orchestrator"
         DataflowRefreshHistory: Record "PBI Dataflow Refresh History";
     begin
         // Delete refresh history first (foreign key dependencies)
-        DatasetRefreshHistory.DeleteAll(true);
-        DataflowRefreshHistory.DeleteAll(true);
+        DatasetRefreshHistory.DeleteAll(false);
+        DataflowRefreshHistory.DeleteAll(false);
 
-        // Delete resources
-        PowerBIDataset.DeleteAll(true);
-        PowerBIDataflow.DeleteAll(true);
-        PowerBIDashboard.DeleteAll(true);
-        PowerBIReport.DeleteAll(true);
+        // Delete resources (skip validation to avoid FK constraint errors)
+        PowerBIDataset.DeleteAll(false);
+        PowerBIDataflow.DeleteAll(false);
+        PowerBIDashboard.DeleteAll(false);
+        PowerBIReport.DeleteAll(false);
 
         // Delete workspaces last
-        PowerBIWorkspace.DeleteAll(true);
+        PowerBIWorkspace.DeleteAll(false);
     end;
 
     /// <summary>

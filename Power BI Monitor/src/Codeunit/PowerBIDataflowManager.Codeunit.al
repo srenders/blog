@@ -67,11 +67,17 @@ codeunit 90135 "Power BI Dataflow Manager"
     local procedure ProcessDataflows(WorkspaceId: Guid; JsonArray: JsonArray)
     var
         DataflowRec: Record "Power BI Dataflow";
+        WorkspaceRec: Record "Power BI Workspace";
         JToken: JsonToken;
         JObject: JsonObject;
         Counter: Integer;
         RefreshHistoryCounter: Integer;
     begin
+        // Skip if workspace doesn't exist in BC yet
+        WorkspaceRec.SetRange("Workspace ID", WorkspaceId);
+        if WorkspaceRec.IsEmpty() then
+            exit;
+
         Counter := 0;
         RefreshHistoryCounter := 0;
         foreach JToken in JsonArray do begin
@@ -105,53 +111,58 @@ codeunit 90135 "Power BI Dataflow Manager"
         if not PowerBIJsonProcessor.ExtractDataflowInfo(JsonObj, DataflowId, DataflowName, Description, ConfiguredBy) then
             exit(false);
 
-        // Find or create dataflow record
-        if not DataflowRec.Get(DataflowId, WorkspaceId) then begin
+        // Find or create dataflow record (use SetRange to avoid Get error)
+        DataflowRec.SetRange("Dataflow ID", DataflowId);
+        DataflowRec.SetRange("Workspace ID", WorkspaceId);
+        if not DataflowRec.FindFirst() then begin
             DataflowRec.Init();
             DataflowRec."Dataflow ID" := DataflowId;
             DataflowRec."Workspace ID" := WorkspaceId;
+            DataflowRec."Dataflow Name" := CopyStr(DataflowName, 1, MaxStrLen(DataflowRec."Dataflow Name"));
+            DataflowRec."Description" := CopyStr(Description, 1, MaxStrLen(DataflowRec."Description"));
+            DataflowRec."Configured By" := CopyStr(ConfiguredBy, 1, MaxStrLen(DataflowRec."Configured By"));
+            WebUrl := PowerBIJsonProcessor.BuildDataflowWebUrl(WorkspaceId, DataflowId);
+            DataflowRec."Web URL" := CopyStr(WebUrl, 1, MaxStrLen(DataflowRec."Web URL"));
+            DataflowRec."Last Synchronized" := CurrentDateTime();
+            DataflowRec.Insert(false);
+        end else begin
+            // Update dataflow information with proper text length handling
+            DataflowRec."Dataflow Name" := CopyStr(DataflowName, 1, MaxStrLen(DataflowRec."Dataflow Name"));
+            DataflowRec."Description" := CopyStr(Description, 1, MaxStrLen(DataflowRec."Description"));
+            DataflowRec."Configured By" := CopyStr(ConfiguredBy, 1, MaxStrLen(DataflowRec."Configured By"));
+            WebUrl := PowerBIJsonProcessor.BuildDataflowWebUrl(WorkspaceId, DataflowId);
+            DataflowRec."Web URL" := CopyStr(WebUrl, 1, MaxStrLen(DataflowRec."Web URL"));
+            DataflowRec."Last Synchronized" := CurrentDateTime();
+            DataflowRec.Modify(false);
         end;
-
-        // Update dataflow information with proper text length handling
-        DataflowRec."Dataflow Name" := CopyStr(DataflowName, 1, MaxStrLen(DataflowRec."Dataflow Name"));
-        DataflowRec."Description" := CopyStr(Description, 1, MaxStrLen(DataflowRec."Description"));
-        DataflowRec."Configured By" := CopyStr(ConfiguredBy, 1, MaxStrLen(DataflowRec."Configured By"));
-
-        WebUrl := PowerBIJsonProcessor.BuildDataflowWebUrl(WorkspaceId, DataflowId);
-        DataflowRec."Web URL" := CopyStr(WebUrl, 1, MaxStrLen(DataflowRec."Web URL"));
-        DataflowRec."Last Synchronized" := CurrentDateTime();
-
-        // Save record
-        if DataflowRec."Dataflow ID" = DataflowId then
-            DataflowRec.Modify(true)
-        else
-            DataflowRec.Insert(true);
 
         exit(true);
     end;
 
     /// <summary>
-    /// Gets dataflow information by ID
+    /// Gets dataflow information by ID and workspace
     /// </summary>
     /// <param name="DataflowId">The dataflow ID to retrieve</param>
+    /// <param name="WorkspaceId">The workspace ID the dataflow belongs to</param>
     /// <param name="DataflowRec">The dataflow record to populate</param>
     /// <returns>True if dataflow was found</returns>
-    procedure GetDataflow(DataflowId: Guid; var DataflowRec: Record "Power BI Dataflow"): Boolean
+    procedure GetDataflow(DataflowId: Guid; WorkspaceId: Guid; var DataflowRec: Record "Power BI Dataflow"): Boolean
     begin
-        exit(DataflowRec.Get(DataflowId));
+        exit(DataflowRec.Get(DataflowId, WorkspaceId));
     end;
 
     /// <summary>
     /// Validates if a dataflow exists and belongs to an active workspace
     /// </summary>
     /// <param name="DataflowId">The dataflow ID to validate</param>
+    /// <param name="WorkspaceId">The workspace ID to validate</param>
     /// <returns>True if dataflow is valid and accessible</returns>
-    procedure ValidateDataflow(DataflowId: Guid): Boolean
+    procedure ValidateDataflow(DataflowId: Guid; WorkspaceId: Guid): Boolean
     var
         DataflowRec: Record "Power BI Dataflow";
         WorkspaceRec: Record "Power BI Workspace";
     begin
-        if not DataflowRec.Get(DataflowId) then
+        if not DataflowRec.Get(DataflowId, WorkspaceId) then
             exit(false);
 
         // Check if workspace is enabled for sync

@@ -89,6 +89,7 @@ codeunit 90133 "Power BI Dataset Manager"
     local procedure ProcessDatasets(JsonArray: JsonArray; WorkspaceId: Guid)
     var
         PowerBIDataset: Record "Power BI Dataset";
+        WorkspaceRec: Record "Power BI Workspace";
         JToken: JsonToken;
         JObject: JsonObject;
         DatasetId: Guid;
@@ -97,6 +98,11 @@ codeunit 90133 "Power BI Dataset Manager"
         ConfiguredBy: Text;
         IsRefreshable: Boolean;
     begin
+        // Skip if workspace doesn't exist in BC yet
+        WorkspaceRec.SetRange("Workspace ID", WorkspaceId);
+        if WorkspaceRec.IsEmpty() then
+            exit;
+
         foreach JToken in JsonArray do begin
             JObject := JToken.AsObject();
 
@@ -113,21 +119,28 @@ codeunit 90133 "Power BI Dataset Manager"
 
     local procedure CreateOrUpdateDataset(var PowerBIDataset: Record "Power BI Dataset"; DatasetId: Guid; WorkspaceId: Guid; DatasetName: Text; WebUrl: Text; ConfiguredBy: Text; IsRefreshable: Boolean)
     begin
-        // Insert or update dataset record
-        if not PowerBIDataset.Get(DatasetId, WorkspaceId) then begin
+        // Insert or update dataset record (use SetRange to avoid Get error)
+        PowerBIDataset.SetRange("Dataset ID", DatasetId);
+        PowerBIDataset.SetRange("Workspace ID", WorkspaceId);
+        if not PowerBIDataset.FindFirst() then begin
             PowerBIDataset.Init();
             PowerBIDataset."Dataset ID" := DatasetId;
             PowerBIDataset."Workspace ID" := WorkspaceId;
-            PowerBIDataset.Insert();
+            PowerBIDataset."Dataset Name" := CopyStr(DatasetName, 1, MaxStrLen(PowerBIDataset."Dataset Name"));
+            PowerBIDataset."Web URL" := CopyStr(WebUrl, 1, MaxStrLen(PowerBIDataset."Web URL"));
+            PowerBIDataset."Configured By" := CopyStr(ConfiguredBy, 1, MaxStrLen(PowerBIDataset."Configured By"));
+            PowerBIDataset."Is Refreshable" := IsRefreshable;
+            PowerBIDataset."Last Synchronized" := CurrentDateTime();
+            PowerBIDataset.Insert(false);
+        end else begin
+            // Update fields
+            PowerBIDataset."Dataset Name" := CopyStr(DatasetName, 1, MaxStrLen(PowerBIDataset."Dataset Name"));
+            PowerBIDataset."Web URL" := CopyStr(WebUrl, 1, MaxStrLen(PowerBIDataset."Web URL"));
+            PowerBIDataset."Configured By" := CopyStr(ConfiguredBy, 1, MaxStrLen(PowerBIDataset."Configured By"));
+            PowerBIDataset."Is Refreshable" := IsRefreshable;
+            PowerBIDataset."Last Synchronized" := CurrentDateTime();
+            PowerBIDataset.Modify(false);
         end;
-
-        // Update fields
-        PowerBIDataset."Dataset Name" := CopyStr(DatasetName, 1, MaxStrLen(PowerBIDataset."Dataset Name"));
-        PowerBIDataset."Web URL" := CopyStr(WebUrl, 1, MaxStrLen(PowerBIDataset."Web URL"));
-        PowerBIDataset."Configured By" := CopyStr(ConfiguredBy, 1, MaxStrLen(PowerBIDataset."Configured By"));
-        PowerBIDataset."Is Refreshable" := IsRefreshable;
-        PowerBIDataset."Last Synchronized" := CurrentDateTime();
-        PowerBIDataset.Modify();
     end;
 
     local procedure ProcessRefreshHistory(JsonArray: JsonArray; WorkspaceId: Guid; DatasetId: Guid)

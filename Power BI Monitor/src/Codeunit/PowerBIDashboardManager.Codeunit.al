@@ -65,10 +65,16 @@ codeunit 90136 "Power BI Dashboard Manager"
     local procedure ProcessDashboards(WorkspaceId: Guid; JsonArray: JsonArray)
     var
         DashboardRec: Record "Power BI Dashboard";
+        WorkspaceRec: Record "Power BI Workspace";
         JToken: JsonToken;
         JObject: JsonObject;
         Counter: Integer;
     begin
+        // Skip if workspace doesn't exist in BC yet
+        WorkspaceRec.SetRange("Workspace ID", WorkspaceId);
+        if WorkspaceRec.IsEmpty() then
+            exit;
+
         Counter := 0;
         foreach JToken in JsonArray do begin
             JObject := JToken.AsObject();
@@ -106,25 +112,30 @@ codeunit 90136 "Power BI Dashboard Manager"
         IsReadOnly := PowerBIJsonProcessor.GetBooleanValue(JsonObj, 'isReadOnly', false);
 
         // Find or create dashboard record
-        if not DashboardRec.Get(DashboardId) then begin
+        DashboardRec.SetRange("Dashboard ID", DashboardId);
+        if not DashboardRec.FindFirst() then begin
+            // Insert new dashboard
             DashboardRec.Init();
             DashboardRec."Dashboard ID" := DashboardId;
+            DashboardRec."Workspace ID" := WorkspaceId;
+            DashboardRec."Dashboard Name" := DashboardName;
+            DashboardRec."Display Name" := DisplayName;
+            DashboardRec."Embed URL" := EmbedUrl;
+            DashboardRec."Web URL" := WebUrl;
+            DashboardRec."Is ReadOnly" := IsReadOnly;
+            DashboardRec."Last Sync Date" := CurrentDateTime();
+            DashboardRec.Insert(false);
+        end else begin
+            // Update existing dashboard
+            DashboardRec."Workspace ID" := WorkspaceId;
+            DashboardRec."Dashboard Name" := DashboardName;
+            DashboardRec."Display Name" := DisplayName;
+            DashboardRec."Embed URL" := EmbedUrl;
+            DashboardRec."Web URL" := WebUrl;
+            DashboardRec."Is ReadOnly" := IsReadOnly;
+            DashboardRec."Last Sync Date" := CurrentDateTime();
+            DashboardRec.Modify(false);
         end;
-
-        // Update dashboard information
-        DashboardRec."Workspace ID" := WorkspaceId;
-        DashboardRec."Dashboard Name" := DashboardName;
-        DashboardRec."Display Name" := DisplayName;
-        DashboardRec."Embed URL" := EmbedUrl;
-        DashboardRec."Web URL" := WebUrl;
-        DashboardRec."Is ReadOnly" := IsReadOnly;
-        DashboardRec."Last Sync Date" := CurrentDateTime();
-
-        // Save record
-        if DashboardRec."Dashboard ID" = DashboardId then
-            DashboardRec.Modify(true)
-        else
-            DashboardRec.Insert(true);
 
         exit(true);
     end;
@@ -143,7 +154,8 @@ codeunit 90136 "Power BI Dashboard Manager"
         TileCount: Integer;
     begin
         // Get dashboard record to find workspace
-        if not DashboardRec.Get(DashboardId) then
+        DashboardRec.SetRange("Dashboard ID", DashboardId);
+        if not DashboardRec.FindFirst() then
             exit(false);
 
         // Build API URL for dashboard tiles
@@ -175,7 +187,8 @@ codeunit 90136 "Power BI Dashboard Manager"
     /// <returns>True if dashboard was found</returns>
     procedure GetDashboard(DashboardId: Guid; var DashboardRec: Record "Power BI Dashboard"): Boolean
     begin
-        exit(DashboardRec.Get(DashboardId));
+        DashboardRec.SetRange("Dashboard ID", DashboardId);
+        exit(DashboardRec.FindFirst());
     end;
 
     /// <summary>
@@ -188,11 +201,13 @@ codeunit 90136 "Power BI Dashboard Manager"
         DashboardRec: Record "Power BI Dashboard";
         WorkspaceRec: Record "Power BI Workspace";
     begin
-        if not DashboardRec.Get(DashboardId) then
+        DashboardRec.SetRange("Dashboard ID", DashboardId);
+        if not DashboardRec.FindFirst() then
             exit(false);
 
         // Check if workspace is enabled for sync
-        if not WorkspaceRec.Get(DashboardRec."Workspace ID") then
+        WorkspaceRec.SetRange("Workspace ID", DashboardRec."Workspace ID");
+        if not WorkspaceRec.FindFirst() then
             exit(false);
 
         exit(WorkspaceRec."Sync Enabled");

@@ -25,6 +25,7 @@ table 90115 "Power BI Dashboard"
             Caption = 'Workspace ID';
             DataClassification = CustomerContent;
             TableRelation = "Power BI Workspace"."Workspace ID";
+            ValidateTableRelation = false;
         }
 
         field(4; "Workspace Name"; Text[250])

@@ -15,6 +15,7 @@ table 90113 "Power BI Dataflow"
             DataClassification = SystemMetadata;
             Caption = 'Workspace ID';
             TableRelation = "Power BI Workspace"."Workspace ID";
+            ValidateTableRelation = false;
         }
         field(10; "Dataflow Name"; Text[250])
         {

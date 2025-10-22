@@ -16,6 +16,7 @@ table 90114 "Power BI Report"
             Caption = 'Workspace ID';
             DataClassification = SystemMetadata;
             TableRelation = "Power BI Workspace"."Workspace ID";
+            ValidateTableRelation = false;
         }
         field(10; Name; Text[250])
         {
@@ -39,6 +40,7 @@ table 90114 "Power BI Report"
             Caption = 'Dataset ID';
             DataClassification = SystemMetadata;
             TableRelation = "Power BI Dataset"."Dataset ID";
+            ValidateTableRelation = false;
         }
         field(21; "Dataset Name"; Text[250])
         {

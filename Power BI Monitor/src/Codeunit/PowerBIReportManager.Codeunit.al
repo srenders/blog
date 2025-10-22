@@ -65,10 +65,16 @@ codeunit 90137 "Power BI Report Manager"
     local procedure ProcessReports(WorkspaceId: Guid; JsonArray: JsonArray)
     var
         ReportRec: Record "Power BI Report";
+        WorkspaceRec: Record "Power BI Workspace";
         JToken: JsonToken;
         JObject: JsonObject;
         Counter: Integer;
     begin
+        // Skip if workspace doesn't exist in BC yet
+        WorkspaceRec.SetRange("Workspace ID", WorkspaceId);
+        if WorkspaceRec.IsEmpty() then
+            exit;
+
         Counter := 0;
         foreach JToken in JsonArray do begin
             JObject := JToken.AsObject();
@@ -103,51 +109,56 @@ codeunit 90137 "Power BI Report Manager"
         EmbedUrl := CopyStr(PowerBIJsonProcessor.GetTextValue(JsonObj, 'embedUrl', ''), 1, MaxStrLen(EmbedUrl));
         WebUrl := CopyStr(PowerBIJsonProcessor.GetTextValue(JsonObj, 'webUrl', ''), 1, MaxStrLen(WebUrl));
 
-        // Find or create report record
-        if not ReportRec.Get(ReportId) then begin
+        // Find or create report record using composite key (Report ID + Workspace ID)
+        ReportRec.SetRange("Report ID", ReportId);
+        ReportRec.SetRange("Workspace ID", WorkspaceId);
+        if not ReportRec.FindFirst() then begin
             ReportRec.Init();
             ReportRec."Report ID" := ReportId;
+            ReportRec."Workspace ID" := WorkspaceId;
+            ReportRec.Name := ReportName;
+            ReportRec."Dataset ID" := DatasetId;
+            ReportRec."Embed URL" := EmbedUrl;
+            ReportRec."Web URL" := WebUrl;
+            ReportRec."Last Sync" := CurrentDateTime();
+            ReportRec.Insert(false);
+        end else begin
+            // Update report information
+            ReportRec.Name := ReportName;
+            ReportRec."Dataset ID" := DatasetId;
+            ReportRec."Embed URL" := EmbedUrl;
+            ReportRec."Web URL" := WebUrl;
+            ReportRec."Last Sync" := CurrentDateTime();
+            ReportRec.Modify(false);
         end;
-
-        // Update report information
-        ReportRec."Workspace ID" := WorkspaceId;
-        ReportRec.Name := ReportName;
-        ReportRec."Dataset ID" := DatasetId;
-        ReportRec."Embed URL" := EmbedUrl;
-        ReportRec."Web URL" := WebUrl;
-        ReportRec."Last Sync" := CurrentDateTime();
-
-        // Save record
-        if ReportRec."Report ID" = ReportId then
-            ReportRec.Modify(true)
-        else
-            ReportRec.Insert(true);
 
         exit(true);
     end;
 
     /// <summary>
-    /// Gets report information by ID
+    /// Gets report information by ID and workspace
     /// </summary>
     /// <param name="ReportId">The report ID to retrieve</param>
+    /// <param name="WorkspaceId">The workspace ID the report belongs to</param>
     /// <param name="ReportRec">The report record to populate</param>
     /// <returns>True if report was found</returns>
-    procedure GetReport(ReportId: Guid; var ReportRec: Record "Power BI Report"): Boolean
+    procedure GetReport(ReportId: Guid; WorkspaceId: Guid; var ReportRec: Record "Power BI Report"): Boolean
     begin
-        exit(ReportRec.Get(ReportId));
+        exit(ReportRec.Get(ReportId, WorkspaceId));
     end;
 
     /// <summary>
     /// Validates if a report exists and belongs to an active workspace
     /// </summary>
     /// <param name="ReportId">The report ID to validate</param>
+    /// <param name="WorkspaceId">The workspace ID to validate</param>
     /// <returns>True if report is valid and accessible</returns>
-    procedure ValidateReport(ReportId: Guid): Boolean
+    procedure ValidateReport(ReportId: Guid; WorkspaceId: Guid): Boolean
     var
         ReportRec: Record "Power BI Report";
         WorkspaceRec: Record "Power BI Workspace";
     begin
-        if not ReportRec.Get(ReportId) then
+        if not ReportRec.Get(ReportId, WorkspaceId) then
             exit(false);
 
         // Check if workspace is enabled for sync

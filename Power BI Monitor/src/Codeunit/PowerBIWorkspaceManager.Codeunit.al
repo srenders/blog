@@ -79,24 +79,26 @@ codeunit 90134 "Power BI Workspace Manager"
         WorkspaceType := CopyStr(PowerBIJsonProcessor.GetTextValue(JsonObj, 'type', 'Workspace'), 1, MaxStrLen(WorkspaceType));
         IsReadOnly := PowerBIJsonProcessor.GetBooleanValue(JsonObj, 'isReadOnly', false);
 
-        // Find or create workspace record
-        if not WorkspaceRec.Get(WorkspaceId) then begin
+        // Find or create workspace record (use SetRange to avoid Get error)
+        WorkspaceRec.SetRange("Workspace ID", WorkspaceId);
+        if not WorkspaceRec.FindFirst() then begin
             WorkspaceRec.Init();
             WorkspaceRec."Workspace ID" := WorkspaceId;
+            WorkspaceRec."Workspace Name" := WorkspaceName;
+            WorkspaceRec."Workspace Type" := WorkspaceType;
+            WorkspaceRec."Is Read Only" := IsReadOnly;
+            WorkspaceRec."Last Synchronized" := CurrentDateTime();
+            WorkspaceRec."Sync Enabled" := true;
+            WorkspaceRec.Insert(false);
+        end else begin
+            // Update existing workspace information
+            WorkspaceRec."Workspace Name" := WorkspaceName;
+            WorkspaceRec."Workspace Type" := WorkspaceType;
+            WorkspaceRec."Is Read Only" := IsReadOnly;
+            WorkspaceRec."Last Synchronized" := CurrentDateTime();
+            WorkspaceRec."Sync Enabled" := true;
+            WorkspaceRec.Modify(false);
         end;
-
-        // Update workspace information
-        WorkspaceRec."Workspace Name" := WorkspaceName;
-        WorkspaceRec."Workspace Type" := WorkspaceType;
-        WorkspaceRec."Is Read Only" := IsReadOnly;
-        WorkspaceRec."Last Synchronized" := CurrentDateTime();
-        WorkspaceRec."Sync Enabled" := true;
-
-        // Save record
-        if WorkspaceRec."Workspace ID" = WorkspaceId then
-            WorkspaceRec.Modify(true)
-        else
-            WorkspaceRec.Insert(true);
 
         exit(true);
     end;

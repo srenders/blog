@@ -1,197 +1,813 @@
-# API Performance Extension# API Performance Extension# API Performance Extension# API Performance Extension
+# API Performance Extension# API Performance Extension# API Performance Extension# API Performance Extension# API Performance Extension# API Performance Extension# API Performance Extension
 
 
 
-Test and compare API performance with different database indexing strategies in Business Central.
+Test and compare API READ performance with different database indexing strategies in Business Central.
 
 
 
-## Table of ContentsTest and compare API performance with different database indexing strategies in Business Central.
+## Table of ContentsTest and compare API READ performance with different database indexing strategies in Business Central.
+
+
 
 - [What Is This?](#what-is-this)
 
 - [Quick Start](#quick-start)
 
-- [What's Included](#whats-included)
+- [What's Included](#whats-included)## Table of ContentsTest and compare API performance with different database indexing strategies in Business Central.
 
-- [How to Use](#how-to-use)## Table of ContentsBusiness Central extension for testing and comparing API performance with different database indexing strategies.Business Central extension for testing and comparing API performance with different indexing strategies.
+- [How to Use](#how-to-use)
 
 - [API Endpoints](#api-endpoints)
 
 - [Testing Tips](#testing-tips)
 
-- [Technical Details](#technical-details)
+- [Technical Details](#technical-details)- [What Is This?](#what-is-this)
 
-- [What Is This?](#what-is-this)
 
-## What Is This?
 
-- [Quick Start](#quick-start)
+## What Is This?- [Quick Start](#quick-start)
 
-This extension lets you compare how different database keys and indexes affect API performance in Business Central. 
 
-- [What's Included](#whats-included)## Overview## Overview
 
-**The Setup:**
+This extension lets you compare how different database keys and indexes affect API READ performance in Business Central - **optimized for Power BI scenarios**.- [What's Included](#whats-included)## Table of ContentsTest and compare API performance with different database indexing strategies in Business Central.
 
-- 4 tables with identical fields- [How to Use](#how-to-use)
 
-- Each table uses a different indexing strategy
 
-- 12 API endpoints to test performance- [API Endpoints](#api-endpoints)
+**The Setup:**- [How to Use](#how-to-use)
 
-- Tools to generate test data
+- 4 tables with identical fields
 
-- [Testing Tips](#testing-tips)
+- Each table uses a different indexing strategy- [API Endpoints](#api-endpoints)
 
-**Why?** To see which indexing strategy works best for your specific queries.
+- 12 API endpoints to test READ performance
 
-- [Technical Details](#technical-details)This extension helps you test and compare how different key and covering index strategies affect API performance in Business Central. It includes 4 table variants with identical fields but different indexing approaches, along with 12 API endpoints for comprehensive testing.This extension provides tools to test and compare database key and covering index strategies in Business Central APIs. It includes 4 table variants with identical fields but different indexing approaches, allowing you to measure and compare performance.
+- Tools to generate test data- [Testing Tips](#testing-tips)
+
+- **Built-in AL READ performance testing** designed for Power BI full-load scenarios
+
+- [Technical Details](#technical-details)- [What Is This?](#what-is-this)
+
+**Why?** Power BI typically loads ALL records from APIs. This extension helps you see which indexing strategy delivers the fastest performance when loading complete datasets.
+
+
 
 ## Quick Start
 
-
+## What Is This?- [Quick Start](#quick-start)
 
 1. Install the extension
 
-2. Search for **"API Performance Hub"**---
+2. Search for **"API Performance Hub"**
 
 3. Click **"Populate ALL Table Variants"**
 
-4. Enter a number (try 10,000 records)
+4. Enter a number (try 10,000 records)This extension lets you compare how different database keys and indexes affect API READ performance in Business Central. - [What's Included](#whats-included)## Table of ContentsTest and compare API performance with different database indexing strategies in Business Central.
 
-5. Test the APIs with Postman or Power BI
+5. Click **"Quick Read Performance Test"** to test reading ALL records
 
-6. Compare response times## What Is This?## Features## Features
+6. Or test the APIs with Power BI
 
+7. Compare response times
 
+**The Setup:**- [How to Use](#how-to-use)
 
 That's it! 🎉
 
+- 4 tables with identical fields
 
+## What's Included
 
-## What's IncludedThis extension lets you compare how different database keys and indexes affect API performance in Business Central. 
-
-
+- Each table uses a different indexing strategy- [API Endpoints](#api-endpoints)- [What Is This?](#what-is-this)
 
 ### 4 Table Variants
 
+- 12 API endpoints to test READ performance
+
+| Table | Strategy | Use Case |
+
+|-------|----------|----------|- Tools to generate test data- [Testing Tips](#testing-tips)
+
+| **Original** (91100) | Covering indexes + SumIndexFields | Best performance |
+
+| **No Covering** (91103) | Regular keys only | Standard approach |- **Built-in AL READ performance testing** to compare APIs without external tools
+
+| **Minimal** (91104) | Primary key only | Worst case |
+
+| **Alternative** (91105) | Different covering strategy | Alternative optimization |- [Technical Details](#technical-details)- [Quick Start](#quick-start)
 
 
-| Table | Strategy | Use Case |**The Setup:**### 4 Table Variants- **4 Table Variants** with different indexing strategies:
 
-|-------|----------|----------|
+### 12 API Endpoints**Why?** To see which indexing strategy works best for your specific READ queries.
 
-| **Original** (91100) | Covering indexes + SumIndexFields | Best performance |- 4 tables with identical fields
 
-| **No Covering** (91103) | Regular keys only | Standard approach |
-
-| **Minimal** (91104) | Primary key only | Worst case |- Each table uses a different indexing strategy- **Original with Covering Indexes** (91100) - Optimized with covering indexes and SumIndexFields  - Original with Covering Indexes (91100)
-
-| **Alternative** (91105) | Different covering strategy | Alternative optimization |
-
-- 12 API endpoints to test performance
-
-### 12 API Endpoints
-
-- Tools to generate test data- **No Covering Indexes** (91103) - Regular keys only  - No Covering Indexes (91103)
 
 Each table has 3 APIs:
 
-- **Page API** - Standard OData access
+- **Page API** - Standard OData READ access
 
-- **Query API** - Query-based access
+- **Query API** - Query-based READ access## Quick Start
 
-- **Aggregate API** - Pre-aggregated data**Why?** To see which indexing strategy works best for your specific queries.- **Minimal Keys** (91104) - Only primary key (worst-case scenario)  - Minimal Keys (91104)
+- **Aggregate API** - Pre-aggregated READ data
 
-
+## What Is This?- [What's Included](#whats-included)
 
 ### Pages
 
+1. Install the extension
 
+- **API Performance Hub** - Central dashboard with built-in READ performance tests
 
-- **API Performance Hub** - Central dashboard---- **Alternative Covering Strategy** (91105) - Different covering approach  - Alternative Covering Strategy (91105)
-
-- **4 List Pages** - One for each table (read-only, newest first)
-
-
-
-## How to Use
-
-## Quick Start
-
-### Generate Test Data
+- **4 List Pages** - One for each table (read-only, newest first)2. Search for **"API Performance Hub"**
 
 
 
-**Option 1: All Tables at Once** (recommended)
-
-1. Open "API Performance Hub"1. Install the extension### 12 API Endpoints- **12 API Endpoints** (3 per table variant):
-
-2. Click "Populate ALL Table Variants"
-
-3. Enter number of records2. Search for **"API Performance Hub"**
+### Built-in READ Performance Testing3. Click **"Populate ALL Table Variants"**
 
 
 
-**Option 2: One Table at a Time**3. Click **"Populate ALL Table Variants"**Each table variant has 3 APIs:  - Page APIs for standard OData access
+Run AL-based READ performance tests directly from the API Performance Hub - **optimized for Power BI scenarios**:4. Enter a number (try 10,000 records)This extension lets you compare how different database keys and indexes affect API performance in Business Central. - [How to Use](#how-to-use)## Table of ContentsBusiness Central extension for testing and comparing API performance with different database indexing strategies.Business Central extension for testing and comparing API performance with different indexing strategies.
 
-1. Open any list page
+- **Quick Read Performance Test** - Reads ALL records from Original vs No Covering tables
 
-2. Actions → "Insert Test Data"4. Enter a number (try 10,000 records)
+- **Filtered Read Test** - Reads ALL matching records (last 6 months filter)5. Click **"Quick Read Performance Test"** to run built-in READ tests
+
+- **Aggregate Read Test** - Tests SUM operations on ALL records (SumIndexFields vs manual)
+
+- **Run All Read Performance Tests** - Comprehensive READ testing of ALL records in all variants6. Or test the APIs with Postman or Power BI
+
+
+
+**All tests are READ-ONLY operations** - they measure how fast ALL data can be retrieved through:7. Compare response times
+
+- **Page APIs** (using record tables directly - simulates Page API endpoint)
+
+- **Query APIs** (using query objects - simulates Query API endpoint)**The Setup:**- [API Endpoints](#api-endpoints)
+
+
+
+**Power BI Focus**: Tests simulate Power BI's typical behavior of loading complete datasets, not just small samples. This gives you realistic performance metrics for your actual Power BI reports.That's it! 🎉
+
+
+
+## How to Use- 4 tables with identical fields
+
+
+
+### Generate Test Data## What's Included
+
+
+
+**Option 1: All Tables at Once** (recommended)- Each table uses a different indexing strategy- [Testing Tips](#testing-tips)
+
+1. Open "API Performance Hub"
+
+2. Click "Populate ALL Table Variants"### 4 Table Variants
+
+3. Enter number of records (10,000+ recommended for realistic Power BI testing)
+
+- 12 API endpoints to test performance
+
+**Option 2: One Table at a Time**
+
+1. Open any list page| Table | Strategy | Use Case |
+
+2. Actions → "Insert Test Data"
+
+3. Enter number of records|-------|----------|----------|- Tools to generate test data- [Technical Details](#technical-details)
+
+
+
+### Run Built-in READ Performance Tests| **Original** (91100) | Covering indexes + SumIndexFields | Best performance |
+
+
+
+1. Open "API Performance Hub"| **No Covering** (91103) | Regular keys only | Standard approach |- **Built-in AL performance testing** to compare APIs without external tools
+
+2. Navigate to **Performance Tests (AL Code)** group
+
+3. Click one of the READ test actions:| **Minimal** (91104) | Primary key only | Worst case |
+
+   - **Quick Read Performance Test** - Reads ALL records from 2 variants (fast comparison)
+
+   - **Filtered Read Test** - Reads ALL matching records with date filter (Power BI scenario)| **Alternative** (91105) | Different covering strategy | Alternative optimization |- [What Is This?](#what-is-this)
+
+   - **Aggregate Read Test** - SUM ALL records (CalcSums vs manual)
+
+   - **Run All Read Performance Tests** - Complete READ benchmark (ALL records, all 4 variants)
+
+4. View results in a message dialog showing READ times in milliseconds
+
+### 12 API Endpoints**Why?** To see which indexing strategy works best for your specific queries.
+
+**What the tests measure:**
+
+- How long it takes to READ ALL records from each table variant
+
+- Page API READ speed (via record table) vs Query API READ speed (via query object)
+
+- Impact of covering indexes on full-table READ operationsEach table has 3 APIs:## What Is This?
+
+- Impact of SumIndexFields on aggregate READ operations
+
+- **Real-world Power BI performance** - simulates loading complete datasets- **Page API** - Standard OData READ access
+
+
+
+### Test with Power BI (Recommended)- **Query API** - Query-based READ access## Quick Start
+
+
+
+Connect Power BI to the API endpoints and measure actual load times:- **Aggregate API** - Pre-aggregated READ data
+
+```
+
+https://[environment]/api/performance/performance/v1.0/simpleTransactionEntriesPages- [Quick Start](#quick-start)
+
+https://[environment]/api/performance/performance/v1.0/simpleTransactionEntryQuerys
+
+```### Pages
+
+
+
+Compare Power BI refresh times across all 4 table variants.1. Install the extension
+
+
+
+### Clean Up Data- **API Performance Hub** - Central dashboard with built-in READ performance tests
+
+
+
+- **Delete Test Data** - Removes records starting with "TEST-"- **4 List Pages** - One for each table (read-only, newest first)2. Search for **"API Performance Hub"**This extension lets you compare how different database keys and indexes affect API performance in Business Central. 
+
+- **Delete All Data** - Removes everything (careful!)
+
+
+
+## API Endpoints
+
+### Built-in READ Performance Testing3. Click **"Populate ALL Table Variants"**
+
+### Pattern
+
+```
+
+https://[bc-url]/api/v2.0/companies([id])/[endpoint]
+
+```Run AL-based READ performance tests directly from the API Performance Hub:4. Enter a number (try 10,000 records)- [What's Included](#whats-included)## Overview## Overview
+
+
+
+### Examples- **Quick Read Performance Test** - Reads first 100 records from each variant
+
+```
+
+/simpleTransactionAPI          # Original table - Page API (READ)- **Filtered Read Test** - Tests filtered READ queries (last 6 months)5. Click **"Quick Performance Test"** to run built-in tests
+
+/simpleTransactionQuery        # Original table - Query API (READ)
+
+/simpleTransNoCoversAPI        # No covering table - Page API (READ)- **Aggregate Read Test** - Tests SUM READ operations with SumIndexFields vs manual
+
+/simpleTransMinimalAPI         # Minimal keys table - Page API (READ)
+
+```- **Run All Read Performance Tests** - Comprehensive READ testing of all variants6. Or test the APIs with Postman or Power BI**The Setup:**
+
+
+
+### Power BI Test Query Example
+
+```http
+
+GET /simpleTransactionAPI**All tests are READ-ONLY operations** - they measure how fast data can be retrieved through:7. Compare response times
+
+GET /simpleTransactionQuery
+
+```- **Page APIs** (using record tables directly - simulates Page API endpoint)
+
+
+
+Run these queries in Power BI against all 4 variants and compare refresh times.- **Query APIs** (using query objects - simulates Query API endpoint)- 4 tables with identical fields- [How to Use](#how-to-use)
+
+
+
+## Testing Tips
+
+
+
+### Do This ✅No data is inserted, updated, or deleted during performance testing.That's it! 🎉
+
+
+
+- Generate identical data in all tables (10,000+ records)
+
+- Test READ operations with realistic volumes that match your production
+
+- Run READ tests multiple times and average results## How to Use- Each table uses a different indexing strategy
+
+- Use built-in tests to simulate Power BI loading ALL records
+
+- Test with actual Power BI reports for real-world validation
+
+- Try different READ query patterns (filters, sorting, aggregates)
+
+### Generate Test Data## What's Included
+
+### Avoid This ❌
+
+
+
+- Testing with different data in each table
+
+- Using tiny datasets (<10,000 records) - won't show realistic differences**Option 1: All Tables at Once** (recommended)- 12 API endpoints to test performance- [API Endpoints](#api-endpoints)
+
+- Drawing conclusions from a single READ test
+
+- Testing with small subsets when Power BI loads ALL records1. Open "API Performance Hub"
+
+- Ignoring SQL execution plans
+
+2. Click "Populate ALL Table Variants"### 4 Table Variants
+
+### Sample Test Scenario (Power BI Focused)
 
 3. Enter number of records
 
-5. Test the APIs with Postman or Power BI- **Page API** - Standard OData page-based access  - Query APIs for optimized queries
+1. **Generate Data:** 50,000 records in all tables (realistic volume)
 
-### Clean Up Data
+2. **Run Built-in READ Tests:** Click "Run All Read Performance Tests" - reads ALL records- Tools to generate test data
 
-6. Compare response times
+3. **Review Results:** Check which table variant has fastest READ times for complete datasets
 
-- **Delete Test Data** - Removes records starting with "TEST-"
+4. **Test in Power BI:** Create identical reports using each API endpoint**Option 2: One Table at a Time**
 
-- **Delete All Data** - Removes everything (careful!)- **Query API** - Optimized query-based access  - Aggregate Query APIs for pre-aggregated data
+5. **Compare Refresh Times:** Measure Power BI refresh performance
 
-
-
-## API EndpointsThat's it! 🎉
+6. **Analyze:** Check SQL execution plans for deeper READ insights1. Open any list page| Table | Strategy | Use Case |
 
 
 
-### Pattern- **Aggregate Query API** - Pre-aggregated data with SUM operations
+## Technical Details2. Actions → "Insert Test Data"
+
+
+
+### Object Ranges3. Enter number of records|-------|----------|----------|- [Testing Tips](#testing-tips)
+
+
+
+- Tables: 91100-91105
+
+- Pages: 91100, 91115-91118
+
+- APIs: 91100-91114### Run Built-in READ Performance Tests| **Original** (91100) | Covering indexes + SumIndexFields | Best performance |
+
+- Codeunits: 91100-91107
+
+
+
+### Architecture
+
+1. Open "API Performance Hub"| **No Covering** (91103) | Regular keys only | Standard approach |**Why?** To see which indexing strategy works best for your specific queries.
+
+Built with SOLID principles:
+
+- Interface-based design2. Navigate to **Performance Tests (AL Code)** group
+
+- Factory pattern
+
+- No code duplication3. Click one of the READ test actions:| **Minimal** (91104) | Primary key only | Worst case |
+
+- Easy to extend
+
+   - **Quick Read Performance Test** - Fast comparison (reads 100 records)
+
+The **API Performance Tester** codeunit (91107) provides built-in READ performance testing using:
+
+- `CurrentDateTime` for precise timing measurements   - **Filtered Read Test** - Real-world filtering scenario (reads with date filter)| **Alternative** (91105) | Different covering strategy | Alternative optimization |- [Technical Details](#technical-details)This extension helps you test and compare how different key and covering index strategies affect API performance in Business Central. It includes 4 table variants with identical fields but different indexing approaches, along with 12 API endpoints for comprehensive testing.This extension provides tools to test and compare database key and covering index strategies in Business Central APIs. It includes 4 table variants with identical fields but different indexing approaches, allowing you to measure and compare performance.
+
+- `Duration` data type for calculating elapsed READ time
+
+- Comparison of Page API READ speed vs Query API READ speed   - **Aggregate Read Test** - SUM operations comparison (CalcSums vs manual)
+
+- Testing all 4 table variants with identical READ operations
+
+- **Reads ALL records** (not limited subsets) to simulate Power BI behavior   - **Run All Read Performance Tests** - Complete READ benchmark (all variants)
+
+- **All tests are READ-ONLY** - no insert, update, or delete operations
+
+4. View results in a message dialog showing READ times in milliseconds
+
+### Requirements
+
+### 12 API Endpoints## Quick Start
+
+- Business Central 26.0 or later
+
+**What the tests measure:**
+
+### Test Data
+
+- How long it takes to READ records from each table variant
+
+All test records have Document No. starting with "TEST-"
+
+- Page API READ speed (via record table) vs Query API READ speed (via query object)
+
+## Author
+
+- Impact of covering indexes on READ operationsEach table has 3 APIs:
+
+**Steven Renders**  
+
+Version: 1.0.0.0- Impact of SumIndexFields on aggregate READ operations
+
+
+
+---- **Page API** - Standard OData access
+
+
+
+**Need Help?** Check the comments in the AL code - they explain everything.### Test with External Tools (Optional)
+
+
+- **Query API** - Query-based access1. Install the extension
+
+You can also test READ performance using Postman, Power BI, or other HTTP clients:
+
+```http- **Aggregate API** - Pre-aggregated data
+
+GET https://[environment]/api/v2.0/companies([id])/simpleTransactionAPI
+
+```2. Search for **"API Performance Hub"**---
+
+
+
+### Clean Up Data### Pages
+
+
+
+- **Delete Test Data** - Removes records starting with "TEST-"3. Click **"Populate ALL Table Variants"**
+
+- **Delete All Data** - Removes everything (careful!)
+
+- **API Performance Hub** - Central dashboard with built-in performance tests
+
+## API Endpoints
+
+- **4 List Pages** - One for each table (read-only, newest first)4. Enter a number (try 10,000 records)
+
+### Pattern
 
 ```
 
-https://[bc-url]/api/v2.0/companies([id])/[endpoint]---
+https://[bc-url]/api/v2.0/companies([id])/[endpoint]
 
-```
+```### Built-in Performance Testing5. Test the APIs with Postman or Power BI
 
-- **Test Data Generation**:
+
 
 ### Examples
 
-```## What's Included
+```
 
-/simpleTransactionAPI          # Original table - Page API
+/simpleTransactionAPI          # Original table - Page API (READ)Run AL-based performance tests directly from the API Performance Hub:6. Compare response times## What Is This?## Features## Features
 
-/simpleTransactionQuery        # Original table - Query API### Test Data Generation  - Generate test records for performance testing
+/simpleTransactionQuery        # Original table - Query API (READ)
 
-/simpleTransNoCoversAPI        # No covering table - Page API
+/simpleTransNoCoversAPI        # No covering table - Page API (READ)- **Quick Performance Test** - Reads first 100 records from each variant
 
-/simpleTransMinimalAPI         # Minimal keys table - Page API### 4 Table Variants
+/simpleTransMinimalAPI         # Minimal keys table - Page API (READ)
+
+```- **Filtered Query Test** - Tests filtered queries (last 6 months)
+
+
+
+### Test READ Query Example- **Aggregate Performance Test** - Tests SUM operations with SumIndexFields
+
+```http
+
+GET /simpleTransactionAPI?$filter=postingDate ge 2024-01-01- **Run All Performance Tests** - Comprehensive testing of all variantsThat's it! 🎉
 
 ```
 
-- Generate thousands of test records  - Populate all variants with identical data for fair comparison
+
+
+Run this same READ query against all 4 variants and compare times.
+
+No external tools needed! Just click an action and see the results.
+
+## Testing Tips
+
+
+
+### Do This ✅
+
+## How to Use## What's IncludedThis extension lets you compare how different database keys and indexes affect API performance in Business Central. 
+
+- Generate identical data in all tables
+
+- Test READ operations with realistic volumes (10,000+ records)
+
+- Run READ tests multiple times and average results
+
+- Try different READ query patterns (filters, sorting, aggregates)### Generate Test Data
+
+- Use the built-in AL READ tests for quick comparisons
+
+
+
+### Avoid This ❌
+
+**Option 1: All Tables at Once** (recommended)### 4 Table Variants
+
+- Testing with different data in each table
+
+- Using tiny datasets (<1,000 records)1. Open "API Performance Hub"
+
+- Drawing conclusions from a single READ test
+
+- Ignoring SQL execution plans2. Click "Populate ALL Table Variants"
+
+
+
+### Sample Test Scenario3. Enter number of records
+
+
+
+1. **Generate Data:** 10,000 records in all tables| Table | Strategy | Use Case |**The Setup:**### 4 Table Variants- **4 Table Variants** with different indexing strategies:
+
+2. **Run Built-in READ Tests:** Click "Run All Read Performance Tests"
+
+3. **Review Results:** Check which table variant has fastest READ times**Option 2: One Table at a Time**
+
+4. **Optional:** Run same READ tests via external API calls
+
+5. **Analyze:** Check SQL execution plans for deeper READ insights1. Open any list page|-------|----------|----------|
+
+
+
+## Technical Details2. Actions → "Insert Test Data"
+
+
+
+### Object Ranges3. Enter number of records| **Original** (91100) | Covering indexes + SumIndexFields | Best performance |- 4 tables with identical fields
+
+
+
+- Tables: 91100-91105
+
+- Pages: 91100, 91115-91118
+
+- APIs: 91100-91114### Run Built-in Performance Tests| **No Covering** (91103) | Regular keys only | Standard approach |
+
+- Codeunits: 91100-91107
+
+
+
+### Architecture
+
+1. Open "API Performance Hub"| **Minimal** (91104) | Primary key only | Worst case |- Each table uses a different indexing strategy- **Original with Covering Indexes** (91100) - Optimized with covering indexes and SumIndexFields  - Original with Covering Indexes (91100)
+
+Built with SOLID principles:
+
+- Interface-based design2. Navigate to **Performance Tests (AL Code)** group
+
+- Factory pattern
+
+- No code duplication3. Click one of the test actions:| **Alternative** (91105) | Different covering strategy | Alternative optimization |
+
+- Easy to extend
+
+   - **Quick Performance Test** - Fast comparison (100 records)
+
+The **API Performance Tester** codeunit (91107) provides built-in READ performance testing using:
+
+- `CurrentDateTime` for precise timing measurements   - **Filtered Query Test** - Real-world filtering scenario- 12 API endpoints to test performance
+
+- `Duration` data type for calculating elapsed READ time
+
+- Comparison of Page API READ speed vs Query API READ speed   - **Aggregate Performance Test** - SUM operations comparison
+
+- Testing all 4 table variants with identical READ operations
+
+- **All tests are READ-ONLY** - no insert, update, or delete operations   - **Run All Performance Tests** - Complete benchmark### 12 API Endpoints
+
+
+
+### Requirements4. View results in a message dialog showing timings in milliseconds
+
+
+
+- Business Central 26.0 or later- Tools to generate test data- **No Covering Indexes** (91103) - Regular keys only  - No Covering Indexes (91103)
+
+
+
+### Test Data### Test with External Tools (Optional)
+
+
+
+All test records have Document No. starting with "TEST-"Each table has 3 APIs:
+
+
+
+## AuthorYou can also test the APIs using Postman, Power BI, or other HTTP clients:
+
+
+
+**Steven Renders**  ```http- **Page API** - Standard OData access
+
+Version: 1.0.0.0
+
+GET https://[environment]/api/v2.0/companies([id])/simpleTransactionAPI
+
+---
+
+```- **Query API** - Query-based access
+
+**Need Help?** Check the comments in the AL code - they explain everything.
+
+
+
+### Clean Up Data- **Aggregate API** - Pre-aggregated data**Why?** To see which indexing strategy works best for your specific queries.- **Minimal Keys** (91104) - Only primary key (worst-case scenario)  - Minimal Keys (91104)
+
+
+
+- **Delete Test Data** - Removes records starting with "TEST-"
+
+- **Delete All Data** - Removes everything (careful!)
+
+### Pages
+
+## API Endpoints
+
+
+
+### Pattern
+
+```- **API Performance Hub** - Central dashboard---- **Alternative Covering Strategy** (91105) - Different covering approach  - Alternative Covering Strategy (91105)
+
+https://[bc-url]/api/v2.0/companies([id])/[endpoint]
+
+```- **4 List Pages** - One for each table (read-only, newest first)
+
+
+
+### Examples
+
+```
+
+/simpleTransactionAPI          # Original table - Page API## How to Use
+
+/simpleTransactionQuery        # Original table - Query API
+
+/simpleTransNoCoversAPI        # No covering table - Page API## Quick Start
+
+/simpleTransMinimalAPI         # Minimal keys table - Page API
+
+```### Generate Test Data
+
+
 
 ### Test Query Example
 
+```http
+
+GET /simpleTransactionAPI?$filter=postingDate ge 2024-01-01**Option 1: All Tables at Once** (recommended)
+
+```
+
+1. Open "API Performance Hub"1. Install the extension### 12 API Endpoints- **12 API Endpoints** (3 per table variant):
+
+Run this same query against all 4 variants and compare times.
+
+2. Click "Populate ALL Table Variants"
+
+## Testing Tips
+
+3. Enter number of records2. Search for **"API Performance Hub"**
+
+### Do This ✅
+
+
+
+- Generate identical data in all tables
+
+- Test with realistic volumes (10,000+ records)**Option 2: One Table at a Time**3. Click **"Populate ALL Table Variants"**Each table variant has 3 APIs:  - Page APIs for standard OData access
+
+- Run tests multiple times and average results
+
+- Try different query patterns (filters, sorting, aggregates)1. Open any list page
+
+- Use the built-in AL tests for quick comparisons
+
+2. Actions → "Insert Test Data"4. Enter a number (try 10,000 records)
+
+### Avoid This ❌
+
+3. Enter number of records
+
+- Testing with different data in each table
+
+- Using tiny datasets (<1,000 records)5. Test the APIs with Postman or Power BI- **Page API** - Standard OData page-based access  - Query APIs for optimized queries
+
+- Drawing conclusions from a single test
+
+- Ignoring SQL execution plans### Clean Up Data
+
+
+
+### Sample Test Scenario6. Compare response times
+
+
+
+1. **Generate Data:** 10,000 records in all tables- **Delete Test Data** - Removes records starting with "TEST-"
+
+2. **Run Built-in Tests:** Click "Run All Performance Tests"
+
+3. **Review Results:** Check which table variant is fastest- **Delete All Data** - Removes everything (careful!)- **Query API** - Optimized query-based access  - Aggregate Query APIs for pre-aggregated data
+
+4. **Optional:** Run same tests via external API calls
+
+5. **Analyze:** Check SQL execution plans for deeper insights
+
+
+
+## Technical Details## API EndpointsThat's it! 🎉
+
+
+
+### Object Ranges
+
+
+
+- Tables: 91100-91105### Pattern- **Aggregate Query API** - Pre-aggregated data with SUM operations
+
+- Pages: 91100, 91115-91118
+
+- APIs: 91100-91114```
+
+- Codeunits: 91100-91107
+
+https://[bc-url]/api/v2.0/companies([id])/[endpoint]---
+
+### Architecture
+
+```
+
+Built with SOLID principles:
+
+- Interface-based design- **Test Data Generation**:
+
+- Factory pattern
+
+- No code duplication### Examples
+
+- Easy to extend
+
+```## What's Included
+
+The **API Performance Tester** codeunit (91107) provides built-in performance testing using:
+
+- `CurrentDateTime` for precise timing measurements/simpleTransactionAPI          # Original table - Page API
+
+- `Duration` data type for calculating elapsed time
+
+- Comparison of Page APIs vs Query APIs/simpleTransactionQuery        # Original table - Query API### Test Data Generation  - Generate test records for performance testing
+
+- Testing all 4 table variants with identical operations
+
+/simpleTransNoCoversAPI        # No covering table - Page API
+
+### Requirements
+
+/simpleTransMinimalAPI         # Minimal keys table - Page API### 4 Table Variants
+
+- Business Central 26.0 or later
+
+```
+
+### Test Data
+
+- Generate thousands of test records  - Populate all variants with identical data for fair comparison
+
+All test records have Document No. starting with "TEST-"
+
+### Test Query Example
+
+## Author
+
 ```http| Table | Strategy | Use Case |
 
-GET /simpleTransactionAPI?$filter=postingDate ge 2024-01-01
+**Steven Renders**  
 
-```|-------|----------|----------|- Populate all variants with identical data  - Bulk insert/delete operations
+Version: 1.0.0.0GET /simpleTransactionAPI?$filter=postingDate ge 2024-01-01
 
+
+
+---```|-------|----------|----------|- Populate all variants with identical data  - Bulk insert/delete operations
+
+
+
+**Need Help?** Check the comments in the AL code - they explain everything.
 
 
 Run this same query against all 4 variants and compare times.| **Original** (91100) | Covering indexes + SumIndexFields | Best performance |

@@ -1,6 +1,6 @@
-query 91110 "Simple Trans Minimal Query"
+query 91110 "Simple Trans Minimal"
 {
-    Caption = 'Simple Transaction Query - Minimal Keys';
+    Caption = 'Simple Transaction - Minimal Keys';
     QueryType = API;
     APIPublisher = 'performance';
     APIGroup = 'performance';

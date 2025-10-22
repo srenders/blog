@@ -1,6 +1,6 @@
 query 91113 "Simple Trans Minimal Aggr"
 {
-    Caption = 'Simple Transaction Aggregate Query - Minimal Keys';
+    Caption = 'Simple Transaction Aggregate - Minimal Keys';
     QueryType = API;
     APIPublisher = 'performance';
     APIGroup = 'performance';

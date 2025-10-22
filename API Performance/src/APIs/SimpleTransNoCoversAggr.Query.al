@@ -1,6 +1,6 @@
 query 91112 "Simple Trans No Covers Aggr"
 {
-    Caption = 'Simple Transaction Aggregate Query - No Covering';
+    Caption = 'Simple Transaction Aggregate - No Covering';
     QueryType = API;
     APIPublisher = 'performance';
     APIGroup = 'performance';

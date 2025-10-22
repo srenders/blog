@@ -1,17 +1,17 @@
-query 91109 "Simple Trans No Covers Query"
+query 91101 "Simple Transaction"
 {
-    Caption = 'Simple Transaction Query - No Covering';
+    Caption = 'Simple Transaction';
     QueryType = API;
     APIPublisher = 'performance';
     APIGroup = 'performance';
     APIVersion = 'v1.0';
-    EntityName = 'simpleTransactionNoCoversQuery';
-    EntitySetName = 'simpleTransactionNoCoversQuery';
+    EntityName = 'simpleTransactionEntryQuery';
+    EntitySetName = 'simpleTransactionEntryQuerys';
     DataAccessIntent = ReadOnly;
 
     elements
     {
-        dataitem(SimpleTransNoCovering; "Simple Trans No Covers")
+        dataitem(SimpleTransactionEntry; "Simple Transaction Entry")
         {
             column(entryNo; "Entry No.")
             {

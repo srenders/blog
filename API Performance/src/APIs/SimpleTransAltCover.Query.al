@@ -1,26 +1,26 @@
-query 91114 "Simple Trans Alt Cover Aggr"
+query 91111 "Simple Trans Alt Cover"
 {
-    Caption = 'Simple Transaction Aggregate - Alternative Covering';
+    Caption = 'Simple Transaction - Alternative Covering';
     QueryType = API;
     APIPublisher = 'performance';
     APIGroup = 'performance';
     APIVersion = 'v1.0';
-    EntityName = 'simpleTransactionAltCoverAggr';
-    EntitySetName = 'simpleTransactionAltCoverAggr';
+    EntityName = 'simpleTransactionAltCoverQuery';
+    EntitySetName = 'simpleTransactionAltCoverQuery';
     DataAccessIntent = ReadOnly;
 
     elements
     {
         dataitem(SimpleTransAltCovering; "Simple Trans Alt Covering")
         {
+            column(entryNo; "Entry No.")
+            {
+                Caption = 'Entry No.';
+            }
+
             column(customerNo; "Customer No.")
             {
                 Caption = 'Customer No.';
-            }
-
-            column(documentType; "Document Type")
-            {
-                Caption = 'Document Type';
             }
 
             column(postingDate; "Posting Date")
@@ -28,10 +28,24 @@ query 91114 "Simple Trans Alt Cover Aggr"
                 Caption = 'Posting Date';
             }
 
+            column(documentType; "Document Type")
+            {
+                Caption = 'Document Type';
+            }
+
+            column(documentNo; "Document No.")
+            {
+                Caption = 'Document No.';
+            }
+
+            column(description; Description)
+            {
+                Caption = 'Description';
+            }
+
             column(amountLCY; "Amount (LCY)")
             {
                 Caption = 'Amount (LCY)';
-                Method = Sum;
             }
         }
     }

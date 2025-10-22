@@ -3,6 +3,7 @@ page 90135 "PBI Dataset Refresh History"
     Caption = 'PBI Dataset Refresh History';
     PageType = List;
     SourceTable = "PBI Dataset Refresh History";
+    SourceTableView = sorting("Start Time") order(descending);
     UsageCategory = Lists;
     ApplicationArea = All;
     Editable = false;

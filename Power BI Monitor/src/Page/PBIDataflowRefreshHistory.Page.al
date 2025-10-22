@@ -3,6 +3,7 @@ page 90136 "PBI Dataflow Refresh History"
     Caption = 'PBI Dataflow Refresh History';
     PageType = List;
     SourceTable = "PBI Dataflow Refresh History";
+    SourceTableView = sorting("Start Time") order(descending);
     UsageCategory = Lists;
     ApplicationArea = All;
     Editable = false;

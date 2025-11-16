@@ -525,12 +525,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Issues**: Report bugs via GitHub issues
 - **Questions**: Use GitHub discussions
 
-### Commercial Support
-For enterprise support and customization:
-- Contact: [Your Contact Information]
-- Email: [Your Email]
-- Website: [Your Website]
-
 ---
 
 ## 📊 Quick Start Checklist

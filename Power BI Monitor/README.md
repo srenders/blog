@@ -590,3 +590,5 @@ After setup, explore these features:
 ---
 
 **Power BI Monitor v1.2.0** | Built with ❤️ for Business Central | Service-Oriented Architecture ✨
+
+Power BI Monitor has moved to https://github.com/srenders/power-bi-monitor

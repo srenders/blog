@@ -1,0 +1,37 @@
+{
+  "id": "2cea8967-ca07-4841-a07c-67a01e7a849e",
+  "name": "Tennis Management Test",
+  "publisher": "Tennis Solutions",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    { "id": "f7b56103-2333-4b4c-bc9c-de75b3cfa620",
+    "name": "Tennis Management",
+    "publisher": "Tennis Solutions",
+    "version": "1.0.0.0"}
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "26.0.0.0",
+  "idRanges": [
+    {
+      "from": 61100,
+      "to": 61149
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "15.1",
+  "features": [
+    "NoImplicitWith"
+  ]
+}

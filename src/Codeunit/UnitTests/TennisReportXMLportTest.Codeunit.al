@@ -130,7 +130,7 @@ codeunit 61109 "Tennis Report XMLport Test"
 
         // [WHEN] Importing player via XMLport
         TempBlob.CreateOutStream(OutStream);
-        OutStream.Write(ImportXML);
+        OutStream.WriteText(ImportXML);
         TempBlob.CreateInStream(InStream);
 
         TennisPlayerXMLPort.SetSource(InStream);
@@ -181,7 +181,7 @@ codeunit 61109 "Tennis Report XMLport Test"
 
         // [WHEN] Importing with existing player number
         TempBlob.CreateOutStream(OutStream);
-        OutStream.Write(ImportXML);
+        OutStream.WriteText(ImportXML);
         TempBlob.CreateInStream(InStream);
 
         TennisPlayerXMLPort.SetSource(InStream);

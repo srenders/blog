@@ -55,7 +55,7 @@ codeunit 61103 "Tennis Match Line Test"
         TennisMatchLine.Init();
         TennisMatchLine."Match No." := TennisMatch."No.";
         TennisMatchLine."Line No." := 1;
-        TennisMatchLine."Player No." := TennisPlayer."No.";
+        TennisMatchLine.Validate("Player No.", TennisPlayer."No.");
         TennisMatchLine.Insert(true);
 
         // [THEN] Player name should be populated

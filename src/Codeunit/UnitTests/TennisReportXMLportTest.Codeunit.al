@@ -62,7 +62,7 @@ codeunit 61109 "Tennis Report XMLport Test"
 
         // [THEN] Report should contain only filtered player
         TempBlob.CreateInStream(InStream);
-        InStream.ReadText(ReportContent);
+        InStream.Read(ReportContent);
         if StrPos(ReportContent, TennisPlayer2."No.") > 0 then
             Error('Report should not contain filtered out player');
     end;
@@ -92,7 +92,7 @@ codeunit 61109 "Tennis Report XMLport Test"
 
         // [THEN] Export should contain player data
         TempBlob.CreateInStream(InStream);
-        InStream.ReadText(ExportContent);
+        InStream.Read(ExportContent);
         if StrPos(ExportContent, TennisPlayer."No.") = 0 then
             Error('Export should contain player number');
         if StrPos(ExportContent, TennisPlayer.Name) = 0 then
@@ -130,7 +130,7 @@ codeunit 61109 "Tennis Report XMLport Test"
 
         // [WHEN] Importing player via XMLport
         TempBlob.CreateOutStream(OutStream);
-        OutStream.WriteText(ImportXML);
+        OutStream.Write(ImportXML);
         TempBlob.CreateInStream(InStream);
 
         TennisPlayerXMLPort.SetSource(InStream);
@@ -174,12 +174,14 @@ codeunit 61109 "Tennis Report XMLport Test"
                     '<Number>' + ExistingPlayerNo + '</Number>' +
                     '<Name>Updated Player Name</Name>' +
                     '<DateOfBirth>2024-01-01</DateOfBirth>' +
+                    '<PhoneNo></PhoneNo>' +
+                    '<Email></Email>' +
                     '</TennisPlayer>' +
                     '</RootNodeName>';
 
         // [WHEN] Importing with existing player number
         TempBlob.CreateOutStream(OutStream);
-        OutStream.WriteText(ImportXML);
+        OutStream.Write(ImportXML);
         TempBlob.CreateInStream(InStream);
 
         TennisPlayerXMLPort.SetSource(InStream);

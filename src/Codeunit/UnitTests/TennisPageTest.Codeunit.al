@@ -7,7 +7,6 @@ codeunit 61108 "Tennis Page Test"
         LibraryTennisTest: Codeunit "Library - Tennis Test";
 
     [Test]
-    [HandlerFunctions('ConfirmHandler')]
     procedure TestTennisPlayerCardPage()
     var
         TennisPlayer: Record "Tennis Player";
@@ -36,7 +35,6 @@ codeunit 61108 "Tennis Page Test"
     end;
 
     [Test]
-    [HandlerFunctions('ConfirmHandler')]
     procedure TestTennisMatchCardPage()
     var
         TennisMatch: Record "Tennis Match";
@@ -153,7 +151,6 @@ codeunit 61108 "Tennis Page Test"
     end;
 
     [Test]
-    [HandlerFunctions('ConfirmHandler')]
     procedure TestTennisPlayerCardNewRecord()
     var
         TennisPlayer: Record "Tennis Player";
@@ -180,12 +177,6 @@ codeunit 61108 "Tennis Page Test"
 
         if TennisPlayer."Date of Birth" <> Today() then
             Error('Date of birth should be saved correctly');
-    end;
-
-    [ConfirmHandler]
-    procedure ConfirmHandler(Question: Text[1024]; var Reply: Boolean)
-    begin
-        Reply := true;
     end;
 
     local procedure Initialize()

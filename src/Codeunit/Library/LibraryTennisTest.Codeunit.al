@@ -3,17 +3,15 @@ codeunit 61101 "Library - Tennis Test"
     procedure CreateTennisSetup(): Record "Tennis Setup"
     var
         TennisSetup: Record "Tennis Setup";
-        NoSeries: Record "No. Series";
-        NoSeriesLine: Record "No. Series Line";
     begin
         if TennisSetup.Get() then
             TennisSetup.Delete();
 
         // Create number series for players
-        CreateNumberSeries('PLAYERS', 'Tennis Players', NoSeries, NoSeriesLine);
+        CreateNumberSeries('PLAYERS', 'Tennis Players');
 
         // Create number series for matches  
-        CreateNumberSeries('MATCHES', 'Tennis Matches', NoSeries, NoSeriesLine);
+        CreateNumberSeries('MATCHES', 'Tennis Matches');
 
         TennisSetup.Init();
         TennisSetup."Primary Key" := '';
@@ -71,7 +69,10 @@ codeunit 61101 "Library - Tennis Test"
         TennisMatch.Modify();
     end;
 
-    local procedure CreateNumberSeries(SeriesCode: Code[20]; Description: Text[100]; var NoSeries: Record "No. Series"; var NoSeriesLine: Record "No. Series Line")
+    local procedure CreateNumberSeries(SeriesCode: Code[20]; Description: Text[100])
+    var
+        NoSeries: Record "No. Series";
+        NoSeriesLine: Record "No. Series Line";
     begin
         if NoSeries.Get(SeriesCode) then
             NoSeries.Delete(true);

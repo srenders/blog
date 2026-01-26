@@ -13,8 +13,10 @@ codeunit 61114 "Tennis Integration Test Runner"
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
         IsInitialized: Boolean;
-        RankingPlayerTxt: Label 'Ranking Player %1';
-        DateFormulaTxt: Label '+%1D';
+        RankingPlayerTxt: Label 'Ranking Player %1', Comment = '%1 = Player number';
+        BulkPlayerTxt: Label 'Bulk Player %1', Comment = '%1 = Player number';
+
+        DateFormulaTxt: Label '-%1D', Comment = '%1 = Number of days';
 
     local procedure RunIntegrationTestSuite()
     begin
@@ -153,7 +155,6 @@ codeunit 61114 "Tennis Integration Test Runner"
     var
         TennisPlayer: array[4] of Record "Tennis Player";
         TennisMatch: Record "Tennis Match";
-        TennisMatchLine: Record "Tennis Match Line";
         i: Integer;
         WinCount: Integer;
     begin
@@ -185,19 +186,22 @@ codeunit 61114 "Tennis Integration Test Runner"
         TennisPlayer: Record "Tennis Player";
         PlayerCount: Integer;
         i: Integer;
+        PlayerEmail: Text[80];
     begin
         // [SCENARIO] Bulk import of multiple players
 
         LibraryTennisTest.CreateTennisSetup();
 
         // Import 50 players
-        for i := 1 to 50 do
+        for i := 1 to 50 do begin
+            PlayerEmail := 'player' + Format(i) + '@test.local';
             LibraryTennisTest.CreateTennisPlayer(
-                StrSubstNo('Bulk Player %1', i),
-                CalcDate(StrSubstNo('-%1D', i), Today()),
+                StrSubstNo(BulkPlayerTxt, i),
+                CalcDate(StrSubstNo('<' + DateFormulaTxt + '>', i), Today()),
                 StrSubstNo('+1-555-%1', PadStr(Format(i), 4, '0')),
-                StrSubstNo('player%1@bulk.test', i)
+                PlayerEmail
             );
+        end;
 
         // Verify all players created
         PlayerCount := TennisPlayer.Count();
@@ -367,8 +371,8 @@ codeunit 61114 "Tennis Integration Test Runner"
 
         // Create matches for different dates
         LibraryTennisTest.CreateTennisMatch(Today(), "Tennis Match Type"::Singles);
-        LibraryTennisTest.CreateTennisMatch(CalcDate('+1D', Today()), "Tennis Match Type"::Doubles);
-        LibraryTennisTest.CreateTennisMatch(CalcDate('+2D', Today()), "Tennis Match Type"::Singles);
+        LibraryTennisTest.CreateTennisMatch(CalcDate('<+1D>', Today()), "Tennis Match Type"::Doubles);
+        LibraryTennisTest.CreateTennisMatch(CalcDate('<+2D>', Today()), "Tennis Match Type"::Singles);
 
         // Verify data for report
         MatchCount := TennisMatch.Count();
@@ -376,7 +380,7 @@ codeunit 61114 "Tennis Integration Test Runner"
             Error('Insufficient data for match report generation');
 
         // Test date range filters
-        TennisMatch.SetRange("Match Date", Today(), CalcDate('+2D', Today()));
+        TennisMatch.SetRange("Match Date", Today(), CalcDate('<+2D>', Today()));
         if TennisMatch.Count() <> 3 then
             Error('Match report date filter not working correctly');
     end;
@@ -385,7 +389,6 @@ codeunit 61114 "Tennis Integration Test Runner"
     var
         TennisPlayer: Record "Tennis Player";
         TennisMatch: Record "Tennis Match";
-        TennisMatchLine: Record "Tennis Match Line";
         SinglesCount, DoublesCount : Integer;
     begin
         // [SCENARIO] Statistics report generation

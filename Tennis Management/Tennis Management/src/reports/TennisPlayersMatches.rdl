@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="ReportTitle">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>ReportTitle</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ReportTitle</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PlayerNoLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>PlayerNoLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>PlayerNoLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PlayerNameLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>PlayerNameLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>PlayerNameLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="MatchNoLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>MatchNoLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MatchNoLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="MatchDateLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>MatchDateLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MatchDateLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CourtNoLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>CourtNoLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>CourtNoLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="StatusLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>StatusLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>StatusLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="OpponentLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>OpponentLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>OpponentLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TeamLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>TeamLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>TeamLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="NoMatchesLbl">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>NoMatchesLbl</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>NoMatchesLbl</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="No_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>No_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>No_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Name_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Name_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Name_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DateOfBirth_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>DateOfBirth_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>DateOfBirth_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PhoneNo_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>PhoneNo_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>PhoneNo_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Email_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Email_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Email_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalMatches_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>TotalMatches_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>TotalMatches_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="MatchesWon_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>MatchesWon_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MatchesWon_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="MatchesLost_TennisPlayerCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>MatchesLost_TennisPlayerCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MatchesLost_TennisPlayerCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="MatchNo_PlayerMatchLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>MatchNo_PlayerMatchLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>MatchNo_PlayerMatchLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="LineNo_PlayerMatchLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>LineNo_PlayerMatchLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>LineNo_PlayerMatchLineCaption</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Team_PlayerMatchLineCaption">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>Team_PlayerMatchLineCaption</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Team_PlayerMatchLineCaption</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="No_TennisPlayer">
+          <DataField>No_TennisPlayer</DataField>
+        </Field>
+        <Field Name="Name_TennisPlayer">
+          <DataField>Name_TennisPlayer</DataField>
+        </Field>
+        <Field Name="DateOfBirth_TennisPlayer">
+          <DataField>DateOfBirth_TennisPlayer</DataField>
+        </Field>
+        <Field Name="PhoneNo_TennisPlayer">
+          <DataField>PhoneNo_TennisPlayer</DataField>
+        </Field>
+        <Field Name="Email_TennisPlayer">
+          <DataField>Email_TennisPlayer</DataField>
+        </Field>
+        <Field Name="TotalMatches_TennisPlayer">
+          <DataField>TotalMatches_TennisPlayer</DataField>
+        </Field>
+        <Field Name="MatchesWon_TennisPlayer">
+          <DataField>MatchesWon_TennisPlayer</DataField>
+        </Field>
+        <Field Name="MatchesLost_TennisPlayer">
+          <DataField>MatchesLost_TennisPlayer</DataField>
+        </Field>
+        <Field Name="MatchNo_PlayerMatchLine">
+          <DataField>MatchNo_PlayerMatchLine</DataField>
+        </Field>
+        <Field Name="LineNo_PlayerMatchLine">
+          <DataField>LineNo_PlayerMatchLine</DataField>
+        </Field>
+        <Field Name="Team_PlayerMatchLine">
+          <DataField>Team_PlayerMatchLine</DataField>
+        </Field>
+        <Field Name="MatchDate">
+          <DataField>MatchDate</DataField>
+        </Field>
+        <Field Name="CourtNo">
+          <DataField>CourtNo</DataField>
+        </Field>
+        <Field Name="MatchStatus">
+          <DataField>MatchStatus</DataField>
+        </Field>
+        <Field Name="Opponent">
+          <DataField>Opponent</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

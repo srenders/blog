@@ -1,0 +1,14 @@
+# AL Package Cache
+.alpackages/
+
+# Compiled app files
+*.app
+
+# VS Code settings (optional - remove this line if you want to share settings)
+.vscode/
+
+# Snapshots
+.snapshots/
+
+# Launch.json is often machine-specific
+launch.json

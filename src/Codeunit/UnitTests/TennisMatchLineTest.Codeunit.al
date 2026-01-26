@@ -5,7 +5,6 @@ codeunit 61103 "Tennis Match Line Test"
 
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
-        IsInitialized: Boolean;
 
     [Test]
     procedure TestTennisMatchLineCreation()
@@ -137,10 +136,7 @@ codeunit 61103 "Tennis Match Line Test"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 }

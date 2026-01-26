@@ -13,7 +13,6 @@ codeunit 61110 "Tennis Test Runner"
 
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
-        IsInitialized: Boolean;
 
     local procedure RunAllTennisTests()
     begin
@@ -162,10 +161,7 @@ codeunit 61110 "Tennis Test Runner"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 

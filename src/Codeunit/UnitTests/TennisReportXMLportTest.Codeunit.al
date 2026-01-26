@@ -6,7 +6,6 @@ codeunit 61109 "Tennis Report XMLport Test"
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
         TempBlob: Codeunit "Temp Blob";
-        IsInitialized: Boolean;
 
     [Test]
     procedure TestTennisPlayersAndMatchesReport()
@@ -197,10 +196,7 @@ codeunit 61109 "Tennis Report XMLport Test"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 }

@@ -6,7 +6,6 @@ codeunit 61105 "Tennis Assisted Setup Test"
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
         TennisAssistedSetup: Codeunit "Tennis Assisted Setup";
-        IsInitialized: Boolean;
 
     [Test]
     procedure TestAssistedSetupRegistration()
@@ -110,10 +109,7 @@ codeunit 61105 "Tennis Assisted Setup Test"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 }

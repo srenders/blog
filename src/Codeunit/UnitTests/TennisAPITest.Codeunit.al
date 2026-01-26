@@ -5,7 +5,6 @@ codeunit 61107 "Tennis API Test"
 
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
-        IsInitialized: Boolean;
 
     [Test]
     procedure TestTennisPlayersAPIQuery()
@@ -157,10 +156,7 @@ codeunit 61107 "Tennis API Test"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 }

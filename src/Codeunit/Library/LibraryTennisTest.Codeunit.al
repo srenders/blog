@@ -69,6 +69,20 @@ codeunit 61101 "Library - Tennis Test"
         TennisMatch.Modify();
     end;
 
+    procedure CleanupTestData()
+    var
+        TennisPlayer: Record "Tennis Player";
+        TennisMatch: Record "Tennis Match";
+        TennisMatchLine: Record "Tennis Match Line";
+        TennisSetup: Record "Tennis Setup";
+    begin
+        TennisMatchLine.DeleteAll();
+        TennisMatch.DeleteAll();
+        TennisPlayer.DeleteAll();
+        if TennisSetup.Get() then
+            TennisSetup.Delete();
+    end;
+
     local procedure CreateNumberSeries(SeriesCode: Code[20]; Description: Text[100])
     var
         NoSeries: Record "No. Series";

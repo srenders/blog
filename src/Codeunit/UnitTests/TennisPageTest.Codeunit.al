@@ -5,7 +5,6 @@ codeunit 61108 "Tennis Page Test"
 
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
-        IsInitialized: Boolean;
 
     [Test]
     [HandlerFunctions('ConfirmHandler')]
@@ -191,10 +190,7 @@ codeunit 61108 "Tennis Page Test"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 }

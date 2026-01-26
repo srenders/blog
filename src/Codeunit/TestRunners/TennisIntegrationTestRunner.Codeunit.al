@@ -12,7 +12,6 @@ codeunit 61114 "Tennis Integration Test Runner"
 
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
-        IsInitialized: Boolean;
         RankingPlayerTxt: Label 'Ranking Player %1', Comment = '%1 = Player number';
         BulkPlayerTxt: Label 'Bulk Player %1', Comment = '%1 = Player number';
 
@@ -476,10 +475,7 @@ codeunit 61114 "Tennis Integration Test Runner"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 }

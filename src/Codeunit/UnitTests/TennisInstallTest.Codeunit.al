@@ -5,7 +5,6 @@ codeunit 61106 "Tennis Install Test"
 
     var
         LibraryTennisTest: Codeunit "Library - Tennis Test";
-        IsInitialized: Boolean;
 
     [Test]
     procedure TestNumberSeriesStructure()
@@ -59,10 +58,7 @@ codeunit 61106 "Tennis Install Test"
 
     local procedure Initialize()
     begin
-        if IsInitialized then
-            exit;
-
-        IsInitialized := true;
+        LibraryTennisTest.CleanupTestData();
         Commit();
     end;
 }

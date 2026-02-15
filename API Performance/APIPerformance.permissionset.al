@@ -1,0 +1,43 @@
+namespace APIPerformance;
+
+permissionset 91100 APIPerformance
+{
+    Assignable = true;
+    Permissions = tabledata "API Performance Test Results"=RIMD,
+        tabledata "Simple Trans Alt Covering"=RIMD,
+        tabledata "Simple Trans Minimal Keys"=RIMD,
+        tabledata "Simple Trans No Covers"=RIMD,
+        tabledata "Simple Transaction Entry"=RIMD,
+        table "API Performance Test Results"=X,
+        table "Simple Trans Alt Covering"=X,
+        table "Simple Trans Minimal Keys"=X,
+        table "Simple Trans No Covers"=X,
+        table "Simple Transaction Entry"=X,
+        codeunit "Alt Cover Table Generator"=X,
+        codeunit "API Performance Tester"=X,
+        codeunit "Base Test Data Generator"=X,
+        codeunit "Minimal Keys Table Generator"=X,
+        codeunit "No Covers Table Generator"=X,
+        codeunit "Original Table Generator"=X,
+        codeunit "Simple Transaction Test Data"=X,
+        codeunit "Test Data Generator Factory"=X,
+        page "API Performance Hub"=X,
+        page "API Performance Test Results"=X,
+        page "Number Input Dialog"=X,
+        page "Simple Trans Alt Cover API"=X,
+        page "Simple Trans Alt Cover List"=X,
+        page "Simple Trans Minimal API"=X,
+        page "Simple Trans Minimal List"=X,
+        page "Simple Trans No Covers API"=X,
+        page "Simple Trans No Covers List"=X,
+        page "Simple Transaction API"=X,
+        page "Simple Transaction Entries"=X,
+        query "Simple Trans Alt Cover"=X,
+        query "Simple Trans Alt Cover Aggr"=X,
+        query "Simple Trans Minimal"=X,
+        query "Simple Trans Minimal Aggr"=X,
+        query "Simple Trans No Covers"=X,
+        query "Simple Trans No Covers Aggr"=X,
+        query "Simple Transaction"=X,
+        query "Simple Transaction Aggr"=X;
+}
